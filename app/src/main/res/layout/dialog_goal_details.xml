@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Описание цели"
+        android:textColor="@color/text_main_primary"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Сумма:"
+            android:textColor="@color/text_main_secondary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/amountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00 / 0.00 ₽"
+            android:textColor="@color/text_main_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Прогресс:"
+            android:textColor="@color/text_main_secondary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0%"
+            android:textColor="@color/accent_blue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginBottom="16dp"
+        android:progress="0"
+        android:progressTint="@color/accent_blue"
+        android:backgroundTint="@color/divider_main" />
+
+    <TextView
+        android:id="@+id/deadlineText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Без срока"
+        android:textColor="@color/text_main_secondary"
+        android:textSize="12sp" />
+
+</LinearLayout>

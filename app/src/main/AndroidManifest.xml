@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- Разрешения (если нужно) -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <application
+        android:name=".CapitalApp"
+        android:theme="@style/Theme.Capital">
+
+        <!-- Добавьте этот receiver -->
+        <receiver
+            android:name=".NotificationReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="SHOW_FINANCE_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".AuthActivity"
+            android:theme="@style/Theme.Capital.Auth"
+            android:launchMode="singleTop"
+            android:exported="false" />
+
+        <activity
+            android:name=".RegisterActivity"
+            android:theme="@style/Theme.Capital.Auth"
+            android:launchMode="standard"
+            android:exported="false" />
+
+        <!-- УДАЛИ эту запись - фрагмент не может быть активностью -->
+        <!-- <activity
+            android:name=".fragments.SplashFragment"
+            android:theme="@style/Theme.Capital.Splash"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> -->
+
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/Theme.Capital"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

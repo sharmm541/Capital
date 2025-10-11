@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Мои цели -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/surface_main">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Мои цели"
+                    android:textColor="@color/text_main_primary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <!-- Общий прогресс -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Общий прогресс"
+                        android:textColor="@color/text_main_primary"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/overallProgress"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="35%"
+                        android:textColor="@color/accent_blue"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <!-- Прогресс бар -->
+                <com.google.android.material.progressindicator.LinearProgressIndicator
+                    android:id="@+id/progressBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="8dp"
+                    android:progress="35"
+                    app:trackColor="@color/divider_main"
+                    app:trackCornerRadius="4dp"
+                    app:indicatorColor="@color/accent_blue" />
+
+                <TextView
+                    android:id="@+id/completedGoals"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:text="Выполнено: 3/8 целей"
+                    android:textColor="@color/text_main_secondary"
+                    android:textSize="12sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/divider_main" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/addGoalButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:backgroundTint="@color/accent_blue"
+                    android:text="Добавить цель"
+                    android:textColor="@color/white"
+                    app:cornerRadius="12dp"
+                    app:icon="@drawable/ic_add"
+                    app:iconGravity="textStart" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Активные цели"
+                    android:textColor="@color/text_main_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- RecyclerView для активных целей -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/activeGoalsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="Завершенные цели"
+                    android:textColor="@color/text_main_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <!-- RecyclerView для завершенных целей -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/completedGoalsRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp" />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>

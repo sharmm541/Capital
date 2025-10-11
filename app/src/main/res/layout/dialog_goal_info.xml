@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/background">
+
+    <!-- Заголовок -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Название цели"
+        android:textColor="@color/text_primary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Описание -->
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Описание цели"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp" />
+
+    <!-- Сумма -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Сумма:"
+            android:textColor="@color/text_main_secondary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/amountText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0.00 / 0.00 ₽"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Прогресс -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Прогресс:"
+            android:textColor="@color/text_main_secondary"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/progressText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0%"
+            android:textColor="@color/accent_blue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Прогресс бар -->
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_marginBottom="16dp"
+        android:progress="0"
+        app:trackColor="@color/divider_main"
+        app:trackCornerRadius="4dp"
+        app:indicatorColor="@color/accent_blue" />
+
+    <!-- Дата создания -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Создана:"
+            android:textColor="@color/text_main_secondary"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/createdAtText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01.01.2024"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <!-- Дедлайн -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Срок:"
+            android:textColor="@color/text_main_secondary"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/deadlineText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Без срока"
+            android:textColor="@color/text_primary"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

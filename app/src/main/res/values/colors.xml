@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Основная палитра (Primary Palette) -->
+    <color name="primary_dark">#1A237E</color>
+    <color name="primary_main">#303F9F</color>
+    <color name="primary_light">#7986CB</color>
+    <color name="primary_50">#E8EAF6</color>
+
+    <!-- Семантические цвета (Semantic Colors) -->
+    <color name="success_main">#4CAF50</color>
+    <color name="success_light">#C8E6C9</color>
+    <color name="warning_main">#FF9800</color>
+    <color name="error_main">#F44336</color>
+    <color name="error_light">#FFCDD2</color>
+
+    <!-- Нейтральная палитра (Neutral Colors) -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_disabled">#9E9E9E</color>
+    <color name="divider">#BDBDBD</color>
+    <color name="background">#F5F7FA</color>
+    <color name="surface">#FFFFFF</color>
+    <color name="shadow">#1A000000</color>
+
+    <!-- Дополнительные цвета -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Градиенты (если нужно) -->
+    <color name="gradient_start">#667EEA</color>
+    <color name="gradient_end">#764BA2</color>
+    <color name="accent_purple">#8B5CF6</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="surface_light">#FDFCFE</color>
+    <color name="input_background">#F7F7F9</color>
+    <!-- Градиенты для светлой темы -->
+    <color name="gradient_light_start">#F8FAFF</color>
+    <color name="gradient_light_center">#F0F4FF</color>
+    <color name="gradient_light_end">#E8EEFF</color>
+
+    <!-- ===== НОВЫЕ ЦВЕТА ДЛЯ MAIN ACTIVITY ===== -->
+
+    <!-- Градиенты для основного приложения -->
+    <color name="main_gradient_start">#6366F1</color>
+    <color name="main_gradient_middle">#8B5CF6</color>
+    <color name="main_gradient_end">#D946EF</color>
+
+    <!-- Акцентные цвета для MainActivity -->
+    <color name="accent_blue">#3B82F6</color>
+    <color name="accent_green">#10B981</color>
+    <color name="accent_orange">#F59E0B</color>
+    <color name="accent_red">#EF4444</color>
+    <color name="accent_teal">#14B8A6</color>
+
+    <!-- Поверхности для карточек MainActivity -->
+    <color name="surface_main">#FFFFFF</color>
+    <color name="surface_card">#F8FAFC</color>
+    <color name="surface_elevated">#FFFFFF</color>
+
+    <!-- Текст для MainActivity -->
+    <color name="text_main_primary">#0F172A</color>
+    <color name="text_main_secondary">#475569</color>
+    <color name="text_main_disabled">#94A3B8</color>
+
+    <!-- Статусные цвета для MainActivity -->
+    <color name="status_success">#10B981</color>
+    <color name="status_warning">#F59E0B</color>
+    <color name="status_error">#EF4444</color>
+    <color name="status_info">#3B82F6</color>
+
+    <!-- Разделители для MainActivity -->
+    <color name="divider_main">#F1F5F9</color>
+    <color name="border_light">#E2E8F0</color>
+
+    <!-- Цвета для графиков и диаграмм -->
+    <color name="chart_income">#10B981</color>
+    <color name="chart_expense">#EF4444</color>
+    <color name="chart_savings">#3B82F6</color>
+    <color name="chart_investment">#8B5CF6</color>
+    <color name="chart_other">#F59E0B</color>
+
+    <!-- Цвета категорий для доходов/расходов -->
+    <color name="category_salary">#10B981</color>
+    <color name="category_investment">#8B5CF6</color>
+    <color name="category_gift">#F59E0B</color>
+    <color name="category_food">#EF4444</color>
+    <color name="category_transport">#3B82F6</color>
+    <color name="category_entertainment">#D946EF</color>
+    <color name="category_health">#14B8A6</color>
+    <color name="category_education">#6366F1</color>
+
+    <!-- Градиент для прогресс-баров целей -->
+    <color name="progress_start">#6366F1</color>
+    <color name="progress_end">#D946EF</color>
+
+    <!-- Фон для Bottom Navigation -->
+    <color name="bottom_nav_background">#FFFFFF</color>
+    <color name="bottom_nav_selected">#6366F1</color>
+    <color name="bottom_nav_unselected">#94A3B8</color>
+    <color name="outline_color">#79747E</color>
+</resources>

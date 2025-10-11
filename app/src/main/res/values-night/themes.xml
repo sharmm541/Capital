@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Base.Theme.Capital" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Обязательные атрибуты TextAppearance для Material Components -->
+        <item name="textAppearanceBody1">@style/TextAppearance.MaterialComponents.Body1</item>
+        <item name="textAppearanceBody2">@style/TextAppearance.MaterialComponents.Body2</item>
+        <item name="textAppearanceButton">@style/TextAppearance.MaterialComponents.Button</item>
+        <item name="textAppearanceCaption">@style/TextAppearance.MaterialComponents.Caption</item>
+        <item name="textAppearanceOverline">@style/TextAppearance.MaterialComponents.Overline</item>
+        <item name="textAppearanceHeadline1">@style/TextAppearance.MaterialComponents.Headline1</item>
+        <item name="textAppearanceHeadline2">@style/TextAppearance.MaterialComponents.Headline2</item>
+        <item name="textAppearanceHeadline3">@style/TextAppearance.MaterialComponents.Headline3</item>
+        <item name="textAppearanceHeadline4">@style/TextAppearance.MaterialComponents.Headline4</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.MaterialComponents.Headline5</item>
+        <item name="textAppearanceHeadline6">@style/TextAppearance.MaterialComponents.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.MaterialComponents.Subtitle1</item>
+        <item name="textAppearanceSubtitle2">@style/TextAppearance.MaterialComponents.Subtitle2</item>
+        <!-- Background -->
+        <item name="android:windowBackground">@drawable/background_dark_gradient</item>
+        <item name="android:colorBackground">@color/background_dark</item>
+
+        <!-- Primary colors -->
+        <item name="colorPrimary">@color/primary_light</item>
+        <item name="colorPrimaryVariant">@color/primary_main</item>
+        <item name="colorOnPrimary">@color/text_white</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">@color/surface_dark</item>
+        <item name="colorOnSurface">@color/text_white</item>
+
+        <!-- Background colors -->
+        <item name="colorOnBackground">@color/text_white</item>
+
+        <!-- Error colors -->
+        <item name="colorError">@color/error_main</item>
+        <item name="colorOnError">@color/text_white</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@color/surface_dark</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Navigation bar -->
+        <item name="android:navigationBarColor">@color/surface_dark</item>
+        <item name="android:windowLightNavigationBar">false</item>
+
+        <!-- Material Components styles -->
+        <item name="materialButtonStyle">@style/Widget.Capital.Button.Dark</item>
+        <item name="textInputStyle">@style/Widget.Capital.TextInputLayout.Dark</item>
+
+
+        <!-- Card colors -->
+        <item name="colorSurfaceVariant">@color/surface_card_dark</item>
+
+        <!-- Divider color -->
+        <item name="android:divider">@android:color/darker_gray</item>
+        <item name="dividerColor">@android:color/darker_gray</item>
+    </style>
+
+    <style name="Theme.Capital" parent="Base.Theme.Capital" />
+
+    <!-- Тема для AuthActivity -->
+    <style name="Theme.Capital.Auth" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/gradient_background_dark</item>
+        <item name="colorPrimary">@color/primary_light</item>
+        <item name="colorPrimaryVariant">@color/primary_main</item>
+        <item name="colorOnPrimary">@color/text_white</item>
+    </style>
+
+    <!-- Тема для SplashActivity -->
+    <style name="Theme.Capital.Splash" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/gradient_background_dark</item>
+    </style>
+
+    <!-- Text appearances для темной темы -->
+    <style name="TextAppearance.Capital.Headline1.Dark" parent="TextAppearance.MaterialComponents.Headline1">
+        <item name="android:textColor">@color/text_white</item>
+        <item name="fontFamily">@font/inter_bold</item>
+    </style>
+
+    <style name="TextAppearance.Capital.Headline2.Dark" parent="TextAppearance.MaterialComponents.Headline2">
+        <item name="android:textColor">@color/text_white</item>
+        <item name="fontFamily">@font/inter_medium</item>
+    </style>
+
+    <style name="TextAppearance.Capital.Body1.Dark" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">@color/text_white</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <style name="TextAppearance.Capital.Body2.Dark" parent="TextAppearance.MaterialComponents.Body2">
+        <item name="android:textColor">@color/text_secondary_dark</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <style name="TextAppearance.Capital.Caption.Dark" parent="TextAppearance.MaterialComponents.Caption">
+        <item name="android:textColor">@color/text_disabled_dark</item>
+        <item name="fontFamily">@font/inter_regular</item>
+    </style>
+
+    <!-- Component styles для темной темы -->
+    <style name="Widget.Capital.Button.Dark" parent="Widget.MaterialComponents.Button">
+        <item name="cornerRadius">12dp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="backgroundTint">@color/primary_light</item>
+    </style>
+
+    <style name="Widget.Capital.TextInputLayout.Dark" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusBottomEnd">12dp</item>
+        <item name="boxCornerRadiusBottomStart">12dp</item>
+        <item name="boxCornerRadiusTopEnd">12dp</item>
+        <item name="boxCornerRadiusTopStart">12dp</item>
+        <item name="boxStrokeColor">@color/primary_light</item>
+        <item name="hintTextColor">@color/text_secondary_dark</item>
+        <item name="android:textColorHint">@color/text_secondary_dark</item>
+        <item name="boxBackgroundColor">@color/surface_card_dark</item>
+        <item name="android:textColor">@color/text_white</item>
+    </style>
+</resources>

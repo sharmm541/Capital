@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Верхний баннер с градиентом -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="280dp"
+            android:background="@drawable/gradient_background"
+            android:orientation="vertical"
+            android:paddingStart="32dp"
+            android:paddingTop="60dp"
+            android:paddingEnd="32dp"
+            android:gravity="center_horizontal">
+
+            <!-- Логотип и заголовок -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="💼"
+                android:textSize="48sp"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="CAPITAL"
+                android:textColor="@color/text_white"
+                android:textSize="32sp"
+                android:fontFamily="@font/inter_bold"
+                android:layout_marginBottom="8dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Создайте свой финансовый профиль"
+                android:textColor="@color/primary_50"
+                android:textSize="16sp"
+                android:fontFamily="@font/inter_medium"
+                android:alpha="0.9"/>
+
+        </LinearLayout>
+
+        <!-- Карточка с формой регистрации -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="-40dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="24dp"
+            app:cardElevation="8dp"
+            app:cardBackgroundColor="@color/surface_light">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="32dp">
+
+                <!-- Заголовок формы -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Создать аккаунт"
+                    android:textColor="@color/text_primary"
+                    android:textSize="24sp"
+                    android:fontFamily="@font/inter_bold"
+                    android:layout_marginBottom="8dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Начните управлять финансами уже сегодня"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/inter_regular"
+                    android:layout_marginBottom="32dp"/>
+
+                <!-- Поле имени -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/etName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Имя и фамилия"
+                        android:background="@drawable/input_background"
+                        android:inputType="textCapWords"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:padding="16dp"
+                        android:textColorHint="@color/text_secondary"/>
+
+                </LinearLayout>
+
+                <!-- Поле email -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Email"
+                        android:background="@drawable/input_background"
+                        android:inputType="textEmailAddress"
+                        android:fontFamily="@font/inter_regular"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:padding="16dp"
+                        android:textColorHint="@color/text_secondary"/>
+
+                </LinearLayout>
+
+                <!-- Поле пароля -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/etPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Пароль"
+                        android:background="@drawable/input_background"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/inter_regular"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:padding="16dp"
+                        android:textColorHint="@color/text_secondary"/>
+
+                </LinearLayout>
+
+                <!-- Подтверждение пароля -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/etConfirmPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Подтвердите пароль"
+                        android:background="@drawable/input_background"
+                        android:inputType="textPassword"
+                        android:fontFamily="@font/inter_regular"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:padding="16dp"
+                        android:textColorHint="@color/text_secondary"
+                        tools:ignore="TouchTargetSizeCheck" />
+
+                </LinearLayout>
+
+                <!-- Кнопка регистрации -->
+                <Button
+                    android:id="@+id/btnRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_gradient"
+                    android:text="Зарегистрироваться"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_medium"
+                    android:padding="16dp"
+                    android:layout_marginBottom="16dp"/>
+
+                <!-- Разделитель -->
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp">
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/divider"
+                        android:layout_centerVertical="true"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="или"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/inter_medium"
+                        android:background="@color/surface_light"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_centerInParent="true"/>
+
+                </RelativeLayout>
+
+                <!-- Кнопка возврата к входу -->
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_outline"
+                    android:text="Уже есть аккаунт? Войти"
+                    android:textColor="@color/primary_main"
+                    android:textSize="16sp"
+                    android:fontFamily="@font/inter_medium"
+                    android:padding="16dp"
+                    android:layout_marginBottom="24dp"/>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Футер -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="© 2024 Capital. Все права защищены"
+            android:textColor="@color/text_disabled"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter_regular"
+            android:layout_gravity="center"
+            android:layout_marginBottom="24dp"/>
+
+    </LinearLayout>
+
+</ScrollView>

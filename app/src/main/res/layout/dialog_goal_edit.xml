@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/background">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundColor="@color/input_background"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/titleInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Название цели *"
+            android:maxLines="1"
+            android:textColorHint="@color/text_main_secondary"
+            android:textColor="@color/text_primary"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundColor="@color/input_background"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/descriptionInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Описание"
+            android:maxLines="3"
+            android:textColorHint="@color/text_main_secondary"
+            android:textColor="@color/text_primary"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundColor="@color/input_background"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/targetAmountInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Целевая сумма *"
+            android:inputType="numberDecimal"
+            android:textColorHint="@color/text_main_secondary"
+            android:textColor="@color/text_primary"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundColor="@color/input_background"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/deadlineInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Срок (дд.мм.гггг)"
+            android:inputType="date"
+            android:textColorHint="@color/text_main_secondary"
+            android:textColor="@color/text_primary"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

@@ -1,0 +1,44 @@
+[versions]
+agp = "8.13.0"
+kotlin = "1.8.10"
+appcompat = "1.6.0"
+material = "1.9.0"
+constraintlayout = "2.1.4"
+junit = "4.13.2"
+ext-junit = "1.1.5"
+espresso-core = "3.5.1"
+
+# Добавьте эти версии для Firebase
+firebase-bom = "32.5.0"
+room = "2.5.2"
+google-services = "4.4.3"
+activity = "1.7.2"
+
+[libraries]
+# Существующие библиотеки
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "ext-junit" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+
+# Добавьте эти библиотеки Firebase
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+firebase-auth = { group = "com.google.firebase", name = "firebase-auth" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database" }
+
+# Room Database
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
+# Google Services plugin
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "google-services" }
+activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+
+# Добавьте этот плагин
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }

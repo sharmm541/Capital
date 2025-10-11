@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@color/background">
+
+    <!-- Информация о текущем прогрессе -->
+    <TextView
+        android:id="@+id/progressInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="Текущий прогресс: 0.00 / 0.00 ₽ (0%)"
+        android:textColor="@color/text_primary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxBackgroundColor="@color/input_background"
+        app:boxCornerRadiusBottomEnd="12dp"
+        app:boxCornerRadiusBottomStart="12dp"
+        app:boxCornerRadiusTopEnd="12dp"
+        app:boxCornerRadiusTopStart="12dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/amountInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Сумма для добавления *"
+            android:inputType="numberDecimal"
+            android:textColorHint="@color/text_main_secondary"
+            android:textColor="@color/text_primary" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

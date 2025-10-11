@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "427799371591",
+    "project_id": "capital-2f0a7",
+    "storage_bucket": "capital-2f0a7.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:427799371591:android:52c8faaf7c99242934b662",
+        "android_client_info": {
+          "package_name": "com.Taviak.capital"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "427799371591-2jerq2f4ek1hvivbpg28e7dbsn6pr4qd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4Labctp5Dc8Nwp1ThgOfYt1xwtKIvRB8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "427799371591-2jerq2f4ek1hvivbpg28e7dbsn6pr4qd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
