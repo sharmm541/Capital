@@ -1,0 +1,25 @@
+<resources>
+    <!-- Существующие строки -->
+    <string name="app_name">Capital</string>
+
+    <!-- Новые строки для MainActivity -->
+    <string name="your_balance">Ваш баланс</string>
+    <string name="initial_balance">0 ₽</string>
+    <string name="initial_balance_change">+0% за месяц</string>
+    <string name="fab_add_description">Добавить новую транзакцию</string>
+
+    <!-- Для Bottom Navigation -->
+    <string name="nav_income">Доходы</string>
+    <string name="nav_expenses">Расходы</string>
+    <string name="nav_currency">Курс валют</string>
+    <string name="nav_goals">Цели</string>
+    <string name="nav_profile">Профиль</string>
+    <string-array name="currencies_array">
+        <item>RUB - Российский рубль</item>
+        <item>USD - Доллар США</item>
+        <item>EUR - Евро</item>
+        <item>CNY - Китайский юань</item>
+        <item>GBP - Фунт стерлингов</item>
+        <item>JPY - Японская иена</item>
+    </string-array>
+</resources>

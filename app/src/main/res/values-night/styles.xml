@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Стиль для контейнеров с автоматическим фоном -->
+    <style name="ContainerDarkBackground">
+        <item name="android:background">@drawable/gradient_background_dark</item>
+    </style>
+
+    <!-- Стиль для карточек в темной теме -->
+    <style name="CardViewDark" parent="CardView">
+        <item name="cardBackgroundColor">@color/surface_card_dark</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardCornerRadius">12dp</item>
+        <item name="contentPadding">16dp</item>
+    </style>
+
+    <!-- Стиль для AppBarLayout в темной теме -->
+    <style name="AppBarDark" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:background">@color/surface_dark</item>
+        <item name="elevation">4dp</item>
+    </style>
+
+    <!-- Базовые стили с прямым указанием шрифтов (темные версии) -->
+    <style name="TextHeader1">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/text_white</item>
+    </style>
+
+    <style name="TextBodyMedium">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_white</item>
+    </style>
+
+    <!-- Градиентные тексты -->
+    <style name="TextGradientLarge">
+        <item name="android:textSize">32sp</item>
+        <item name="android:letterSpacing">-0.03</item>
+    </style>
+
+    <style name="TextGradientMedium">
+        <item name="android:textSize">24sp</item>
+        <item name="android:letterSpacing">-0.02</item>
+    </style>
+
+    <!-- Кнопки -->
+    <style name="ButtonGradient">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+        <item name="android:letterSpacing">0.5</item>
+    </style>
+
+    <style name="ButtonOutline">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/primary_light</item>
+        <item name="android:background">@drawable/button_outline_dark</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <!-- Поля ввода -->
+    <style name="InputField">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/text_white</item>
+        <item name="android:background">@drawable/input_background_dark</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
+    <!-- Стиль для диалогов -->
+    <style name="CustomDialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="backgroundColor">@color/background_dark</item>
+        <item name="android:windowBackground">@drawable/dialog_background_dark</item>
+        <item name="android:background">@drawable/dialog_background_dark</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+
+    <!-- Стиль для DatePicker -->
+    <style name="DatePickerDialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowBackground">@drawable/dialog_background_dark</item>
+        <item name="android:background">@drawable/dialog_background_dark</item>
+        <item name="colorAccent">@color/accent_blue</item>
+    </style>
+
+    <!-- Стиль для BottomNavigation в темной теме -->
+    <style name="BottomNavigationDark" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/surface_dark</item>
+        <item name="itemIconTint">@color/bottom_nav_selector_dark</item>
+        <item name="itemTextColor">@color/bottom_nav_selector_dark</item>
+        <item name="itemRippleColor">@color/primary_light</item>
+    </style>
+
+    <!-- Стиль для NavigationView в темной теме -->
+    <style name="NavigationViewDark" parent="Widget.MaterialComponents.NavigationView">
+        <item name="android:background">@color/surface_dark</item>
+        <item name="itemIconTint">@color/nav_drawer_selector_dark</item>
+        <item name="itemTextColor">@color/nav_drawer_selector_dark</item>
+        <item name="itemBackground">@drawable/nav_drawer_item_background_dark</item>
+    </style>
+</resources>
