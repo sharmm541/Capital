@@ -68,7 +68,7 @@
                     android:progress="35"
                     app:trackColor="@color/divider_main"
                     app:trackCornerRadius="4dp"
-                    app:indicatorColor="@color/accent_blue" />
+                    app:indicatorColor="@color/accent_green" />
 
                 <TextView
                     android:id="@+id/completedGoals"
@@ -86,17 +86,19 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="8dp"
                     android:background="@color/divider_main" />
+
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/addGoalButton"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
-                    android:backgroundTint="@color/accent_blue"
+                    android:backgroundTint="@color/accent_green"
                     android:text="Добавить цель"
                     android:textColor="@color/white"
                     app:cornerRadius="12dp"
                     app:icon="@drawable/ic_add"
                     app:iconGravity="textStart" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -128,15 +128,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Баланс -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/surface_main"/>
-
         <!-- Форма добавления дохода -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -174,7 +165,7 @@
                         android:hint="Сумма *"
                         android:background="@drawable/input_background"
                         android:inputType="numberDecimal"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_main_primary"
                         android:textColorHint="@color/text_main_secondary"
                         android:textSize="16sp"
                         android:padding="16dp"/>
@@ -202,7 +193,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/spinner_background"
                         android:padding="16dp"
-                        android:textSize="16sp"
+                        android:textColor="@color/text_main_primary"
                         android:spinnerMode="dropdown"/>
 
                 </LinearLayout>
@@ -228,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/spinner_background"
                         android:padding="16dp"
-                        android:textSize="16sp"
+                        android:textColor="@color/text_main_primary"
                         android:spinnerMode="dropdown"/>
 
                 </LinearLayout>
@@ -248,7 +239,7 @@
                         android:background="@drawable/input_background"
                         android:gravity="top"
                         android:maxLines="3"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_main_primary"
                         android:textColorHint="@color/text_main_secondary"
                         android:textSize="16sp"
                         android:padding="16dp"/>
@@ -272,7 +263,7 @@
                         android:layout_marginEnd="8dp"
                         android:text="Удалить"
                         android:textColor="@color/white"
-                        android:backgroundTint="@color/error_main" />
+                        android:backgroundTint="@color/error_main"/>
 
                     <Button
                         android:id="@+id/addIncomeButton"
@@ -281,7 +272,7 @@
                         android:layout_weight="1"
                         android:text="Добавить"
                         android:textColor="@color/white"
-                        android:backgroundTint="@color/primary_main" />
+                        android:backgroundTint="@color/accent_green" />
 
                 </LinearLayout>
 

@@ -3,8 +3,10 @@ package com.Taviak.capital;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,9 +21,11 @@ public class AuthActivity extends AppCompatActivity {
 
     private EditText etEmail, etPassword;
     private Button btnLogin, btnRegister;
+    private ImageButton btnTogglePassword;
     private ProgressDialog progressDialog;
     private AuthManager authManager;
     private FirebaseAuth firebaseAuth;
+    private boolean isPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,8 +45,10 @@ public class AuthActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         btnLogin = findViewById(R.id.btnLogin);
         btnRegister = findViewById(R.id.btnRegister);
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
 
         setupListeners();
+        setupPasswordToggle();
     }
 
     private void setupListeners() {
@@ -50,10 +56,33 @@ public class AuthActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(v -> navigateToRegister());
     }
 
+    private void setupPasswordToggle() {
+        if (btnTogglePassword != null) {
+            btnTogglePassword.setOnClickListener(v -> togglePasswordVisibility());
+        }
+    }
+
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            // Скрыть пароль
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility_off);
+            btnTogglePassword.setContentDescription("Показать пароль");
+        } else {
+            // Показать пароль
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility);
+            btnTogglePassword.setContentDescription("Скрыть пароль");
+        }
+
+        // Перемещаем курсор в конец текста
+        etPassword.setSelection(etPassword.getText().length());
+        isPasswordVisible = !isPasswordVisible;
+    }
+
     private void checkCurrentUser() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
         if (currentUser != null) {
-            // Пользователь уже залогинен, переходим на главный экран
             handleSuccessfulLogin(currentUser);
         }
     }
@@ -98,13 +127,11 @@ public class AuthActivity extends AppCompatActivity {
                     hideProgress();
 
                     if (task.isSuccessful()) {
-                        // Вход успешен
                         FirebaseUser user = firebaseAuth.getCurrentUser();
                         if (user != null) {
                             handleSuccessfulLogin(user);
                         }
                     } else {
-                        // Ошибка входа
                         String errorMessage = getErrorMessage(task.getException());
                         Toast.makeText(AuthActivity.this, errorMessage, Toast.LENGTH_LONG).show();
                         etPassword.setError("Неверный email или пароль");
@@ -113,19 +140,15 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void handleSuccessfulLogin(FirebaseUser user) {
-        // Сохраняем данные в AuthManager
         authManager.setLoggedIn(true);
         authManager.setUserEmail(user.getEmail());
         authManager.setUserId(user.getUid());
 
-        // Получаем имя пользователя
         String userName = getUserName(user);
         authManager.setUserName(userName);
 
-        // Сохраняем пользователя в Room Database
         saveUserToDatabase(user.getUid(), user.getEmail(), userName);
 
-        // Переходим на MainActivity
         Intent intent = new Intent(AuthActivity.this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -135,7 +158,6 @@ public class AuthActivity extends AppCompatActivity {
         if (user.getDisplayName() != null && !user.getDisplayName().isEmpty()) {
             return user.getDisplayName();
         } else {
-            // Если имя не установлено, извлекаем из email
             return extractNameFromEmail(user.getEmail());
         }
     }
@@ -152,10 +174,8 @@ public class AuthActivity extends AppCompatActivity {
     }
 
     private void saveUserToDatabase(String userId, String email, String name) {
-
         UserViewModel userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
         userViewModel.registerUser(userId, email, name);
-
     }
 
     private String getErrorMessage(Exception exception) {
@@ -197,11 +217,6 @@ public class AuthActivity extends AppCompatActivity {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
     }
 
     @Override

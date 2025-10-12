@@ -62,30 +62,6 @@
     </style>
 
     <!-- Text appearances -->
-    <style name="TextAppearance.Capital.Headline1" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="fontFamily">@font/inter_bold</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Headline2" parent="TextAppearance.MaterialComponents.Headline2">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="fontFamily">@font/inter_medium</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Body1" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@color/text_primary</item>
-        <item name="fontFamily">@font/inter_regular</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Body2" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@color/text_secondary</item>
-        <item name="fontFamily">@font/inter_regular</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Caption" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textColor">@color/text_disabled</item>
-        <item name="fontFamily">@font/inter_regular</item>
-    </style>
 
     <!-- Component styles -->
     <style name="Widget.Capital.Button" parent="Widget.MaterialComponents.Button">
@@ -101,12 +77,5 @@
         <item name="boxStrokeColor">@color/primary_main</item>
         <item name="hintTextColor">@color/text_secondary</item>
         <item name="android:textColorHint">@color/text_secondary</item>
-    </style>
-    <style name="Theme.Capital.Main" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Скопируй все атрибуты из Theme.Capital -->
-        <item name="android:windowBackground">@drawable/gradient_background_light</item>
-        <item name="colorPrimary">@color/primary_main</item>
-        <item name="colorPrimaryVariant">@color/primary_dark</item>
-        <!-- и остальные атрибуты -->
     </style>
 </resources>

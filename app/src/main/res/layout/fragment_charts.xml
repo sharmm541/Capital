@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
@@ -17,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Финансовая аналитика"
-            android:fontFamily="@font/inter_bold"
             android:textColor="@color/text_main_primary"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -44,7 +42,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Период:"
-                    android:fontFamily="@font/inter_regular"
                     android:textColor="@color/text_main_primary"
                     android:textSize="14sp"
                     android:gravity="center_vertical" />
@@ -54,7 +51,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:padding="12dp" />
+                    android:background="@drawable/spinner_background"
+                    android:padding="12dp"
+                    android:textColor="@color/text_main_primary" />
 
             </LinearLayout>
 
@@ -62,7 +61,6 @@
 
         <!-- Информация о минимальных операциях -->
         <TextView
-            android:id="@+id/minOperationsText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Для построения графиков нужно минимум 3 операции"
@@ -90,7 +88,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Доходы vs Расходы"
-                    android:fontFamily="@font/inter_bold"
                     android:textColor="@color/text_main_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -98,7 +95,6 @@
 
                 <!-- Контейнер для вертикальной столбчатой диаграммы -->
                 <LinearLayout
-                    android:id="@+id/barChartContainer"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -139,8 +135,7 @@
                             android:layout_height="wrap_content"
                             android:text="Доходы"
                             android:textSize="12sp"
-                            android:textColor="@color/text_main_primary"
-                            android:fontFamily="@font/inter_regular" />
+                            android:textColor="@color/text_main_primary" />
 
                     </LinearLayout>
 
@@ -175,8 +170,7 @@
                             android:layout_height="wrap_content"
                             android:text="Расходы"
                             android:textSize="12sp"
-                            android:textColor="@color/text_main_primary"
-                            android:fontFamily="@font/inter_regular" />
+                            android:textColor="@color/text_main_primary" />
 
                     </LinearLayout>
 
@@ -205,7 +199,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Расходы по категориям"
-                    android:fontFamily="@font/inter_bold"
                     android:textColor="@color/text_main_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -245,7 +238,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Статистика"
-                    android:fontFamily="@font/inter_bold"
                     android:textColor="@color/text_main_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -264,7 +256,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Общий доход"
-                        android:fontFamily="@font/inter_regular"
                         android:textColor="@color/text_main_primary"
                         android:textSize="14sp" />
 
@@ -273,8 +264,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0 ₽"
-                        android:fontFamily="@font/inter_semibold"
-                        android:textColor="@color/accent_green"
+                        android:textColor="@color/status_success"
                         android:textSize="14sp"
                         android:textStyle="bold" />
 
@@ -293,7 +283,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Общие расходы"
-                        android:fontFamily="@font/inter_regular"
                         android:textColor="@color/text_main_primary"
                         android:textSize="14sp" />
 
@@ -302,7 +291,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0 ₽"
-                        android:fontFamily="@font/inter_semibold"
                         android:textColor="@color/status_error"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -322,7 +310,6 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Баланс"
-                        android:fontFamily="@font/inter_regular"
                         android:textColor="@color/text_main_primary"
                         android:textSize="14sp" />
 
@@ -331,7 +318,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0 ₽"
-                        android:fontFamily="@font/inter_semibold"
                         android:textColor="@color/accent_green"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -350,7 +336,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="💡 Финансовые советы"
-                    android:fontFamily="@font/inter_bold"
                     android:textColor="@color/text_main_primary"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -361,7 +346,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Анализируем ваши финансы..."
-                    android:fontFamily="@font/inter_regular"
                     android:textColor="@color/text_main_secondary"
                     android:textSize="14sp"
                     android:lineSpacingExtra="4dp" />

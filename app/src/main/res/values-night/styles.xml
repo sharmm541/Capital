@@ -1,23 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Стиль для контейнеров с автоматическим фоном -->
-    <style name="ContainerDarkBackground">
-        <item name="android:background">@drawable/gradient_background_dark</item>
-    </style>
 
     <!-- Стиль для карточек в темной теме -->
-    <style name="CardViewDark" parent="CardView">
-        <item name="cardBackgroundColor">@color/surface_card_dark</item>
-        <item name="cardElevation">4dp</item>
-        <item name="cardCornerRadius">12dp</item>
-        <item name="contentPadding">16dp</item>
-    </style>
 
     <!-- Стиль для AppBarLayout в темной теме -->
-    <style name="AppBarDark" parent="Widget.MaterialComponents.AppBarLayout.Primary">
-        <item name="android:background">@color/surface_dark</item>
-        <item name="elevation">4dp</item>
-    </style>
 
     <!-- Базовые стили с прямым указанием шрифтов (темные версии) -->
     <style name="TextHeader1">
@@ -86,18 +73,6 @@
     </style>
 
     <!-- Стиль для BottomNavigation в темной теме -->
-    <style name="BottomNavigationDark" parent="Widget.MaterialComponents.BottomNavigationView">
-        <item name="android:background">@color/surface_dark</item>
-        <item name="itemIconTint">@color/bottom_nav_selector_dark</item>
-        <item name="itemTextColor">@color/bottom_nav_selector_dark</item>
-        <item name="itemRippleColor">@color/primary_light</item>
-    </style>
 
     <!-- Стиль для NavigationView в темной теме -->
-    <style name="NavigationViewDark" parent="Widget.MaterialComponents.NavigationView">
-        <item name="android:background">@color/surface_dark</item>
-        <item name="itemIconTint">@color/nav_drawer_selector_dark</item>
-        <item name="itemTextColor">@color/nav_drawer_selector_dark</item>
-        <item name="itemBackground">@drawable/nav_drawer_item_background_dark</item>
-    </style>
 </resources>

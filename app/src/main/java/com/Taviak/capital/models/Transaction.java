@@ -21,6 +21,7 @@ public class Transaction {
     private String type;
     private boolean isIncome;
 
+
     public Transaction(double amount, String category, String description, Date date, String type, boolean isIncome) {
         this.amount = amount;
         this.category = category;

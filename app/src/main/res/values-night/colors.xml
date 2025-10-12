@@ -1,104 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Основные цвета (остаются такими же) -->
-    <color name="primary_dark">#1A237E</color>
+    <!-- Основные цвета (переопределенные для темной темы) -->
     <color name="primary_main">#7986CB</color>
     <color name="primary_light">#9FA8DA</color>
-    <color name="primary_50">#E8EAF6</color>
 
-    <!-- Семантические цвета (Semantic Colors) -->
-    <color name="success_main">#4CAF50</color>
-    <color name="success_light">#C8E6C9</color>
-    <color name="warning_main">#FF9800</color>
-    <color name="error_main">#F44336</color>
-    <color name="error_light">#FFCDD2</color>
-
-    <!-- Темные цвета фона и поверхностей -->
-    <color name="background_dark">#121212</color>
-    <color name="surface_dark">#1E1E1E</color>
-    <color name="surface_light">#2D2D2D</color>
-    <color name="surface_card_dark">#252525</color>
-
-    <!-- Текстовые цвета для темной темы -->
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#B0B0B0</color>
-    <color name="text_secondary_dark">#A0A0A0</color>
-    <color name="text_disabled">#666666</color>
-    <color name="text_disabled_dark">#555555</color>
-    <color name="text_white">#FFFFFF</color>
-    <color name="divider">#383838</color>
-    <color name="divider_dark">#333333</color>
-    <color name="shadow">#1AFFFFFF</color>
-
-    <!-- Дополнительные цвета -->
-    <color name="white">#FFFFFF</color>
-    <color name="black">#000000</color>
-    <color name="transparent">#00000000</color>
-
-    <!-- Градиенты (темные версии) -->
-    <color name="gradient_start">#4C63D2</color>
-    <color name="gradient_end">#8B5CF6</color>
-    <color name="accent_purple">#A78BFA</color>
-    <color name="input_background">#2A2A2A</color>
-
-    <!-- ===== НОВЫЕ ЦВЕТА ДЛЯ MAIN ACTIVITY (темные версии) ===== -->
-
-    <!-- Градиенты для основного приложения -->
-    <color name="main_gradient_start">#818CF8</color>
-    <color name="main_gradient_middle">#A78BFA</color>
-    <color name="main_gradient_end">#E879F9</color>
-
-    <!-- Акцентные цвета для MainActivity -->
-    <color name="accent_blue">#60A5FA</color>
-    <color name="accent_green">#34D399</color>
-    <color name="accent_orange">#FBBF24</color>
-    <color name="accent_red">#F87171</color>
-    <color name="accent_teal">#2DD4BF</color>
-
-    <!-- Поверхности для карточек MainActivity -->
+    <!-- Фоны и поверхности (переопределенные для темной темы) -->
+    <color name="background">#121212</color>
     <color name="surface_main">#1E1E1E</color>
     <color name="surface_card">#252525</color>
+    <color name="surface_light">#2D2D2D</color>
     <color name="surface_elevated">#2D2D2D</color>
+    <color name="input_background">#2A2A2A</color>
 
-    <!-- Текст для MainActivity -->
+    <!-- Текстовые цвета (переопределенные для темной темы) -->
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
     <color name="text_main_primary">#FFFFFF</color>
     <color name="text_main_secondary">#B0B0B0</color>
     <color name="text_main_disabled">#666666</color>
 
-    <!-- Статусные цвета для MainActivity -->
-    <color name="status_success">#34D399</color>
-    <color name="status_warning">#FBBF24</color>
-    <color name="status_error">#F87171</color>
-    <color name="status_info">#60A5FA</color>
-
-    <!-- Разделители для MainActivity -->
+    <!-- Разделители (переопределенные для темной темы) -->
+    <color name="divider">#383838</color>
     <color name="divider_main">#333333</color>
     <color name="border_light">#404040</color>
+    <color name="outline_color">#A0A0A0</color>
 
-    <!-- Цвета для графиков и диаграмм -->
-    <color name="chart_income">#34D399</color>
-    <color name="chart_expense">#F87171</color>
-    <color name="chart_savings">#60A5FA</color>
-    <color name="chart_investment">#A78BFA</color>
-    <color name="chart_other">#FBBF24</color>
+    <!-- Тени (переопределенные для темной темы) -->
+    <color name="shadow">#1AFFFFFF</color>
 
-    <!-- Цвета категорий для доходов/расходов -->
-    <color name="category_salary">#34D399</color>
-    <color name="category_investment">#A78BFA</color>
-    <color name="category_gift">#FBBF24</color>
-    <color name="category_food">#F87171</color>
-    <color name="category_transport">#60A5FA</color>
-    <color name="category_entertainment">#E879F9</color>
-    <color name="category_health">#2DD4BF</color>
-    <color name="category_education">#818CF8</color>
-
-    <!-- Градиент для прогресс-баров целей -->
-    <color name="progress_start">#818CF8</color>
-    <color name="progress_end">#E879F9</color>
-
-    <!-- Фон для Bottom Navigation -->
+    <!-- Навигация (переопределенные для темной темы) -->
     <color name="bottom_nav_background">#1E1E1E</color>
     <color name="bottom_nav_selected">#818CF8</color>
     <color name="bottom_nav_unselected">#666666</color>
-    <color name="outline_color">#A0A0A0</color>
 </resources>

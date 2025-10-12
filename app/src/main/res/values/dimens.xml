@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Отступы для полей ввода -->
-    <dimen name="input_horizontal_padding">12dp</dimen>
-    <dimen name="input_vertical_padding">16dp</dimen>
 </resources>

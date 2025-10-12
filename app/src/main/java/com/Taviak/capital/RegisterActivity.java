@@ -3,8 +3,10 @@ package com.Taviak.capital;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +22,13 @@ public class RegisterActivity extends AppCompatActivity {
 
     private EditText etName, etEmail, etPassword, etConfirmPassword;
     private Button btnRegister, btnLogin;
+    private ImageButton btnTogglePassword, btnToggleConfirmPassword; // Добавьте эти поля
     private ProgressDialog progressDialog;
     private AuthManager authManager;
     private UserViewModel userViewModel;
     private FirebaseAuth firebaseAuth;
+    private boolean isPasswordVisible = false;
+    private boolean isConfirmPasswordVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +49,65 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
         btnLogin = findViewById(R.id.btnLogin);
 
+        // Инициализация кнопок показа пароля
+        btnTogglePassword = findViewById(R.id.btnTogglePassword);
+        btnToggleConfirmPassword = findViewById(R.id.btnToggleConfirmPassword);
+
         btnLogin.setOnClickListener(V -> navigateToAuth());
         btnRegister.setOnClickListener(v -> attemptRegistration());
+
+        setupPasswordToggles(); // Добавьте этот вызов
     }
 
+    private void setupPasswordToggles() {
+        // Для основного пароля
+        if (btnTogglePassword != null) {
+            btnTogglePassword.setOnClickListener(v -> togglePasswordVisibility());
+        }
+
+        // Для подтверждения пароля
+        if (btnToggleConfirmPassword != null) {
+            btnToggleConfirmPassword.setOnClickListener(v -> toggleConfirmPasswordVisibility());
+        }
+    }
+
+    private void togglePasswordVisibility() {
+        if (isPasswordVisible) {
+            // Скрыть пароль
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility_off);
+            btnTogglePassword.setContentDescription("Показать пароль");
+        } else {
+            // Показать пароль
+            etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            btnTogglePassword.setImageResource(R.drawable.ic_visibility);
+            btnTogglePassword.setContentDescription("Скрыть пароль");
+        }
+
+        // Перемещаем курсор в конец текста
+        etPassword.setSelection(etPassword.getText().length());
+        isPasswordVisible = !isPasswordVisible;
+    }
+
+    private void toggleConfirmPasswordVisibility() {
+        if (isConfirmPasswordVisible) {
+            // Скрыть пароль
+            etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            btnToggleConfirmPassword.setImageResource(R.drawable.ic_visibility_off);
+            btnToggleConfirmPassword.setContentDescription("Показать пароль");
+        } else {
+            // Показать пароль
+            etConfirmPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+            btnToggleConfirmPassword.setImageResource(R.drawable.ic_visibility);
+            btnToggleConfirmPassword.setContentDescription("Скрыть пароль");
+        }
+
+        // Перемещаем курсор в конец текста
+        etConfirmPassword.setSelection(etConfirmPassword.getText().length());
+        isConfirmPasswordVisible = !isConfirmPasswordVisible;
+    }
+
+    // ... остальные методы без изменений
     private void attemptRegistration() {
         String name = etName.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
@@ -190,10 +250,12 @@ public class RegisterActivity extends AppCompatActivity {
             return "Ошибка регистрации: " + error;
         }
     }
+
     private void navigateToAuth() {
         Intent intent = new Intent(this, AuthActivity.class);
         startActivity(intent);
     }
+
     private void showProgress(String message) {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(message);

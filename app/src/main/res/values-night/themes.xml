@@ -72,30 +72,6 @@
     </style>
 
     <!-- Text appearances для темной темы -->
-    <style name="TextAppearance.Capital.Headline1.Dark" parent="TextAppearance.MaterialComponents.Headline1">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="fontFamily">@font/inter_bold</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Headline2.Dark" parent="TextAppearance.MaterialComponents.Headline2">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="fontFamily">@font/inter_medium</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Body1.Dark" parent="TextAppearance.MaterialComponents.Body1">
-        <item name="android:textColor">@color/text_white</item>
-        <item name="fontFamily">@font/inter_regular</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Body2.Dark" parent="TextAppearance.MaterialComponents.Body2">
-        <item name="android:textColor">@color/text_secondary_dark</item>
-        <item name="fontFamily">@font/inter_regular</item>
-    </style>
-
-    <style name="TextAppearance.Capital.Caption.Dark" parent="TextAppearance.MaterialComponents.Caption">
-        <item name="android:textColor">@color/text_disabled_dark</item>
-        <item name="fontFamily">@font/inter_regular</item>
-    </style>
 
     <!-- Component styles для темной темы -->
     <style name="Widget.Capital.Button.Dark" parent="Widget.MaterialComponents.Button">

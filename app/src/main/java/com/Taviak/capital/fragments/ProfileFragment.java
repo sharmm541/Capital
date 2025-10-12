@@ -19,21 +19,26 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.Taviak.capital.AuthActivity;
 import com.Taviak.capital.R;
 import com.Taviak.capital.database.AppDatabase;
+import com.Taviak.capital.database.TransactionDao;
 import com.Taviak.capital.database.UserDao;
 import com.Taviak.capital.entities.User;
+import com.Taviak.capital.models.Transaction;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class ProfileFragment extends Fragment {
@@ -72,16 +77,9 @@ public class ProfileFragment extends Fragment {
         totalBalanceText = view.findViewById(R.id.totalBalanceText);
         saveNameButton = view.findViewById(R.id.saveNameButton);
 
-        // Обработчик клика на саму иконку профиля
         profileImage.setOnClickListener(v -> openImagePicker());
         view.findViewById(R.id.changePasswordButton).setOnClickListener(v -> changePassword());
         view.findViewById(R.id.logoutButton).setOnClickListener(v -> logout());
-    }
-
-    private void saveAllData() {
-        // Сохраняем и имя и фото
-        saveUserName();
-        saveUserPhoto();
     }
 
     private void saveUserName() {
@@ -113,7 +111,6 @@ public class ProfileFragment extends Fragment {
     }
 
     private void initDatabase() {
-        // ИСПРАВЛЕНО: используем единый метод из AppDatabase
         AppDatabase db = AppDatabase.getDatabase(requireContext());
         userDao = db.userDao();
     }
@@ -130,7 +127,6 @@ public class ProfileFragment extends Fragment {
                     currentUser = userDao.getUserByUid(firebaseUser.getUid());
 
                     if (currentUser == null) {
-                        // Создаем нового пользователя только если его нет
                         currentUser = new User();
                         currentUser.setUserid(firebaseUser.getUid());
                         currentUser.setEmail(firebaseUser.getEmail());
@@ -141,7 +137,6 @@ public class ProfileFragment extends Fragment {
                         userDao.insert(currentUser);
                         Log.d("ProfileFragment", "New user created: " + firebaseUser.getUid());
                     } else {
-                        // Если пользователь существует, просто обновляем статус loggedin
                         currentUser.setLoggedin(true);
                         userDao.update(currentUser);
                         Log.d("ProfileFragment", "Existing user logged in: " + firebaseUser.getUid());
@@ -164,12 +159,10 @@ public class ProfileFragment extends Fragment {
             userNameEditText.setText(currentUser.getName());
             userEmail.setText(currentUser.getEmail());
 
-            // Конвертируем timestamp в дату
             String registrationDate = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
                     .format(new Date(currentUser.getCreatedAt()));
             registrationDateText.setText(registrationDate);
 
-            // Загружаем фото профиля
             if (currentUser.getProfileImage() != null) {
                 Bitmap bitmap = BitmapFactory.decodeByteArray(
                         currentUser.getProfileImage(), 0, currentUser.getProfileImage().length);
@@ -181,13 +174,81 @@ public class ProfileFragment extends Fragment {
     }
 
     private void updateStatistics() {
-        // TODO: Реализовать подсчет операций и баланса
-        totalTransactionsText.setText("0");
-        totalBalanceText.setText("0 ₽");
+        new Thread(() -> {
+            try {
+                AppDatabase database = AppDatabase.getDatabase(requireContext());
+                TransactionDao transactionDao = database.transactionDao();
+
+                // Используем getAllTransactionsDirect() вместо getAllTransactions()
+                List<Transaction> allTransactions = transactionDao.getAllTransactionsDirect();
+
+                Log.d("Statistics", "Found transactions: " + allTransactions.size());
+
+                // Подсчитываем общее количество операций
+                int totalOperations = allTransactions.size();
+
+                // Рассчитываем общий баланс
+                double balance = 0.0;
+
+                // Суммируем транзакции (доходы положительные, расходы отрицательные)
+                for (Transaction transaction : allTransactions) {
+                    if (transaction.isIncome()) {
+                        balance += transaction.getAmount(); // Доходы добавляем
+                    } else {
+                        balance -= transaction.getAmount(); // Расходы вычитаем
+                    }
+                    Log.d("Statistics", "Transaction: " + transaction.getAmount() + ", isIncome: " + transaction.isIncome() + ", Category: " + transaction.getCategory());
+                }
+
+                Log.d("Statistics", "Total balance: " + balance + ", Total operations: " + totalOperations);
+
+                // Создаем final копии для использования в лямбде
+                final int finalTotalOperations = totalOperations;
+                final String formattedBalance = formatCurrency(balance);
+                final boolean isPositiveBalance = balance >= 0;
+
+                // Обновляем UI в главном потоке
+                requireActivity().runOnUiThread(() -> {
+                    totalTransactionsText.setText(String.valueOf(finalTotalOperations));
+                    totalBalanceText.setText(formattedBalance);
+
+                    if (isPositiveBalance) {
+                        totalBalanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_green));
+                    } else {
+                        totalBalanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_red));
+                    }
+
+                    Log.d("Statistics", "UI updated - Operations: " + finalTotalOperations + ", Balance: " + formattedBalance);
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                Log.e("Statistics", "Error: " + e.getMessage());
+                requireActivity().runOnUiThread(() -> {
+                    totalTransactionsText.setText("0");
+                    totalBalanceText.setText("0 ₽");
+                    totalBalanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_green));
+                });
+            }
+        }).start();
+    }
+
+    private String formatCurrency(double amount) {
+        try {
+            DecimalFormat formatter = new DecimalFormat("#,##0.##");
+            String formatted = formatter.format(Math.abs(amount));
+
+            if (amount >= 0) {
+                return formatted + " ₽";
+            } else {
+                return "-" + formatted + " ₽";
+            }
+        } catch (Exception e) {
+            return String.valueOf(amount) + " ₽";
+        }
     }
 
     private void setupClickListeners() {
-        // Сохраняем имя при нажатии кнопки
         saveNameButton.setOnClickListener(v -> saveUserName());
     }
 
@@ -207,12 +268,10 @@ public class ProfileFragment extends Fragment {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(requireActivity().getContentResolver(), imageUri);
                 profileImage.setImageBitmap(bitmap);
 
-                // Конвертируем в byte array для сохранения
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 70, stream);
                 selectedImageBytes = stream.toByteArray();
 
-                // Автоматически сохраняем фото в базу данных
                 saveUserPhoto();
 
             } catch (IOException e) {
@@ -225,11 +284,26 @@ public class ProfileFragment extends Fragment {
     private void saveUserPhoto() {
         if (selectedImageBytes != null && currentUser != null) {
             new Thread(() -> {
-                currentUser.setProfileImage(selectedImageBytes);
-                userDao.update(currentUser);
-                requireActivity().runOnUiThread(() ->
-                        Toast.makeText(requireContext(), "Фото сохранено", Toast.LENGTH_SHORT).show()
-                );
+                try {
+                    currentUser.setProfileImage(selectedImageBytes);
+                    userDao.update(currentUser);
+
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(), "Фото сохранено", Toast.LENGTH_SHORT).show();
+
+                        if (profileImage != null) {
+                            Bitmap bitmap = BitmapFactory.decodeByteArray(selectedImageBytes, 0, selectedImageBytes.length);
+                            if (bitmap != null) {
+                                profileImage.setImageBitmap(bitmap);
+                            }
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(requireContext(), "Ошибка сохранения фото", Toast.LENGTH_SHORT).show()
+                    );
+                }
             }).start();
         } else if (selectedImageBytes == null) {
             Toast.makeText(requireContext(), "Сначала выберите фото", Toast.LENGTH_SHORT).show();
@@ -256,25 +330,19 @@ public class ProfileFragment extends Fragment {
 
         new Thread(() -> {
             try {
-                // Сначала получаем текущего пользователя
                 User currentUser = userDao.getUserByUid(currentUserId);
-
                 if (currentUser != null) {
-                    // Устанавливаем loggedin = false вместо удаления
                     currentUser.setLoggedin(false);
                     userDao.update(currentUser);
                     Log.d("ProfileFragment", "User logged out successfully: " + currentUserId);
                 }
-
             } catch (Exception e) {
                 Log.e("ProfileFragment", "Error during logout: " + e.getMessage(), e);
             }
         }).start();
 
-        // Выходим из Firebase
         mAuth.signOut();
 
-        // Переходим на AuthActivity
         Intent intent = new Intent(requireContext(), AuthActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

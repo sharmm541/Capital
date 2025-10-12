@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/background">
+    android:background="@color/surface_main">
 
     <!-- Информация о текущем прогрессе -->
     <TextView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Текущий прогресс: 0.00 / 0.00 ₽ (0%)"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/text_main_primary"
         android:textSize="14sp"
         android:textStyle="bold" />
 
@@ -25,7 +25,9 @@
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
-        app:boxCornerRadiusTopStart="12dp">
+        app:boxCornerRadiusTopStart="12dp"
+        app:hintTextColor="@color/text_main_secondary"
+        app:boxStrokeColor="@color/border_light">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/amountInput"
@@ -33,8 +35,8 @@
             android:layout_height="wrap_content"
             android:hint="Сумма для добавления *"
             android:inputType="numberDecimal"
-            android:textColorHint="@color/text_main_secondary"
-            android:textColor="@color/text_primary" />
+            android:textColor="@color/text_main_primary"
+            android:textColorHint="@color/text_main_secondary" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

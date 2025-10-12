@@ -37,4 +37,5 @@ public interface UserDao {
     byte[] getProfileImage();
     @Query("SELECT * FROM users WHERE userId = :uid LIMIT 1") // используем userId
     User getUserByUid(String uid);
+
 }

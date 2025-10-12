@@ -48,4 +48,7 @@ public interface TransactionDao {
     LiveData<Double> getTotalBalance();
     @Query("SELECT * FROM transactions ORDER BY date DESC")
     List<Transaction> getAllTransactionsDirect();
+
+    @Query("SELECT * FROM transactions WHERE Id = :userId ORDER BY date DESC")
+    List<Transaction> getTransactionsByUserId(String userId);
 }
