@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="@color/background">
+    android:background="@color/surface_main">
 
     <!-- Заголовок -->
     <TextView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Название цели"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/text_main_primary"
         android:textSize="18sp"
         android:textStyle="bold" />
 
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="Описание цели"
-        android:textColor="@color/text_primary"
+        android:textColor="@color/text_main_secondary"
         android:textSize="14sp" />
 
     <!-- Сумма -->
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0.00 / 0.00 ₽"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_main_primary"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0%"
-            android:textColor="@color/accent_blue"
+            android:textColor="@color/text_main_secondary"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -89,7 +89,7 @@
         android:progress="0"
         app:trackColor="@color/divider_main"
         app:trackCornerRadius="4dp"
-        app:indicatorColor="@color/accent_blue" />
+        app:indicatorColor="@color/accent_green" />
 
     <!-- Дата создания -->
     <LinearLayout
@@ -111,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="01.01.2024"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_main_primary"
             android:textSize="12sp" />
 
     </LinearLayout>
@@ -135,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Без срока"
-            android:textColor="@color/text_primary"
+            android:textColor="@color/text_main_primary"
             android:textSize="12sp" />
 
     </LinearLayout>

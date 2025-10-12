@@ -4,9 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="16dp"
-    android:id="@+id/fragment_settings">
-
+    android:padding="16dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -131,22 +129,9 @@
 
                 </LinearLayout>
 
-                <!-- Основная валюта -->
-
-                <!-- Синхронизация с облаком -->
-
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
-        <!-- Безопасность -->
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="2dp"
-            app:cardBackgroundColor="@color/surface_main"/>
 
         <!-- Управление данными -->
         <androidx.cardview.widget.CardView
@@ -170,6 +155,7 @@
                     android:textColor="@color/text_main_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
+
                 <!-- Очистка данных -->
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -182,7 +168,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_delete"
-                        app:tint="@color/text_main_secondary" />
+                        android:tint="@color/text_main_secondary" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -198,14 +184,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Очистить"
-                        android:textColor="@color/status_error"
-                        android:background="@drawable/button_outline"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/error_main"
                         app:cornerRadius="12dp" />
 
                 </LinearLayout>
+
                 <!-- Удаление аккаунта -->
                 <LinearLayout
-                    android:id="@+id/deleteAccountLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -216,7 +202,7 @@
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:src="@drawable/ic_profile_avatar"
-                        app:tint="@color/text_main_secondary" />
+                        android:tint="@color/text_main_secondary" />
 
                     <TextView
                         android:layout_width="0dp"
@@ -232,8 +218,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Удалить"
-                        android:textColor="@color/status_error"
-                        android:background="@drawable/button_outline"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/error_main"
                         app:cornerRadius="12dp" />
 
                 </LinearLayout>

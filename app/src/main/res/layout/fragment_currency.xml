@@ -30,7 +30,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Курсы валют"
-                    android:fontFamily="@font/inter_bold"
                     android:textColor="@color/text_main_primary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -42,8 +41,7 @@
                     android:layout_marginTop="4dp"
                     android:text="Последнее обновление: Сегодня, 10:30"
                     android:textColor="@color/text_main_secondary"
-                    android:textSize="12sp"
-                    android:fontFamily="@font/inter_regular"/>
+                    android:textSize="12sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -186,8 +184,7 @@
                     android:text="Конвертер валют"
                     android:textColor="@color/text_main_primary"
                     android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/inter_bold"/>
+                    android:textStyle="bold" />
 
                 <!-- Поля для конвертера -->
                 <com.google.android.material.textfield.TextInputLayout
@@ -198,14 +195,16 @@
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp">
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintTextColor="@color/text_main_secondary"
+                    app:boxStrokeColor="@color/border_light">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/amountInput"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="Сумма"
-                        android:textColor="@color/primary_main"
+                        android:textColor="@color/text_main_primary"
                         android:textColorHint="@color/text_main_secondary"
                         android:inputType="numberDecimal" />
 
@@ -220,8 +219,7 @@
                     android:background="@drawable/spinner_background"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:textColor="@color/text_main_primary"
-                    android:textSize="16sp"/>
+                    android:textColor="@color/text_main_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -241,17 +239,15 @@
                     android:background="@drawable/spinner_background"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
-                    android:textColor="@color/text_main_primary"
-                    android:textSize="16sp" />
+                    android:textColor="@color/text_main_primary" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/convertButton"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
                     android:layout_marginTop="20dp"
-                    android:backgroundTint="@color/accent_blue"
+                    android:backgroundTint="@color/accent_green"
                     android:text="Конвертировать"
-                    android:fontFamily="@font/inter_bold"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     app:cornerRadius="12dp" />

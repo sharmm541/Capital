@@ -61,7 +61,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 ₽"
-                            android:textColor="@color/error_main"
+                            android:textColor="@color/status_error"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -94,7 +94,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="0 ₽"
-                            android:textColor="@color/error_main"
+                            android:textColor="@color/status_error"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -165,7 +165,7 @@
                         android:textColorHint="@color/text_main_secondary"
                         android:background="@drawable/input_background"
                         android:inputType="numberDecimal"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_main_primary"
                         android:textSize="16sp"
                         android:padding="16dp"/>
 
@@ -192,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/spinner_background"
                         android:padding="16dp"
-                        android:textSize="16sp"/>
+                        android:textColor="@color/text_main_primary"/>
 
                 </LinearLayout>
 
@@ -217,7 +217,7 @@
                         android:layout_height="wrap_content"
                         android:background="@drawable/spinner_background"
                         android:padding="16dp"
-                        android:textSize="16sp"/>
+                        android:textColor="@color/text_main_primary"/>
 
                 </LinearLayout>
 
@@ -237,7 +237,7 @@
                         android:background="@drawable/input_background"
                         android:gravity="top"
                         android:maxLines="3"
-                        android:textColor="@color/text_primary"
+                        android:textColor="@color/text_main_primary"
                         android:textSize="16sp"
                         android:padding="16dp"/>
 
@@ -269,7 +269,7 @@
                         android:layout_weight="1"
                         android:text="Добавить"
                         android:textColor="@color/white"
-                        android:backgroundTint="@color/primary_main" />
+                        android:backgroundTint="@color/accent_green" />
 
                 </LinearLayout>
 

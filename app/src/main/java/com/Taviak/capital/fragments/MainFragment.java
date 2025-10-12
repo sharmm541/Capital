@@ -41,7 +41,6 @@ public class MainFragment extends Fragment {
         setupViewModel();
         setupRecyclerView();
         setupClickListeners(view);
-        setupBottomNavigation(view); // Добавлено
 
         return view;
     }
@@ -137,38 +136,6 @@ public class MainFragment extends Fragment {
                 if (getActivity() instanceof MainActivity) {
                     ((MainActivity) getActivity()).showCurrencyFragment();
                 }
-            });
-        }
-    }
-
-    // ДОБАВЛЕНО: Обработчики для bottom navigation
-    private void setupBottomNavigation(View view) {
-        // Находим BottomNavigationView
-        View bottomNavigationView = view.findViewById(R.id.bottomNavigationView);
-
-        if (bottomNavigationView != null && bottomNavigationView instanceof com.google.android.material.bottomnavigation.BottomNavigationView) {
-            com.google.android.material.bottomnavigation.BottomNavigationView bottomNav =
-                    (com.google.android.material.bottomnavigation.BottomNavigationView) bottomNavigationView;
-
-            bottomNav.setOnNavigationItemSelectedListener(item -> {
-                if (getActivity() instanceof MainActivity) {
-                    MainActivity mainActivity = (MainActivity) getActivity();
-                    int itemId = item.getItemId();
-
-                    // ИСПРАВЛЕНО: заменен switch на if-else
-                    if (itemId == R.id.menu_settings) {
-                        mainActivity.loadFragment(new SettingsFragment());
-                        return true;
-                    } else if (itemId == R.id.menu_profile) {
-                        mainActivity.loadFragment(new ProfileFragment());
-                        return true;
-                    } else if (itemId == R.id.menu_charts) {
-                        // Если есть фрагмент графиков
-                         mainActivity.loadFragment(new ChartsFragment());
-                        return true;
-                    }
-                }
-                return false;
             });
         }
     }

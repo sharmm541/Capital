@@ -24,8 +24,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.Taviak.capital.fragments.*;
+import com.Taviak.capital.managers.AuthManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
@@ -59,7 +61,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Делаем полноэкранный режим
+        // ПРОВЕРКА АВТОРИЗАЦИИ ПЕРЕД ПОКАЗОМ MAIN ACTIVITY
+        AuthManager authManager = AuthManager.getInstance(this);
+        if (!authManager.isUserLoggedIn()) {
+            redirectToAuth();
+            return;
+        }
+
+        // Только если пользователь авторизован - показываем MainActivity
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -78,6 +87,13 @@ public class MainActivity extends AppCompatActivity {
         } else {
             showMainFragment();
         }
+    }
+
+    private void redirectToAuth() {
+        Intent intent = new Intent(this, AuthActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -316,18 +332,20 @@ public class MainActivity extends AppCompatActivity {
 
             if (itemId == R.id.nav_dashboard) {
                 fragment = new MainFragment();
-            } else if (itemId == R.id.nav_income) {
-                fragment = new IncomeFragment();
-            } else if (itemId == R.id.nav_expenses) {
-                fragment = new ExpensesFragment();
+            } else if (itemId == R.id.nav_charts) {
+               fragment = new ChartsFragment();
             } else if (itemId == R.id.nav_goals) {
                 fragment = new GoalsFragment();
             } else if (itemId == R.id.nav_profile) {
                 fragment = new ProfileFragment();
+            } else if (itemId == R.id.nav_settings) {
+                fragment = new SettingsFragment();
             }
 
             if (fragment != null) {
-                loadFragment(fragment);
+                loadFragmentWithAnimation(fragment,
+                        R.anim.scale_in_from_bottom,
+                        R.anim.scale_out_to_bottom);
                 drawerLayout.close();
                 return true;
             }
@@ -344,34 +362,59 @@ public class MainActivity extends AppCompatActivity {
             if (itemId == R.id.nav_dashboard) {
                 fragment = new MainFragment();
                 bottomNavigation.setSelectedItemId(R.id.nav_dashboard);
-            } else if (itemId == R.id.nav_income) {
-                fragment = new IncomeFragment();
-                bottomNavigation.setSelectedItemId(R.id.nav_income);
-            } else if (itemId == R.id.nav_expenses) {
-                fragment = new ExpensesFragment();
-                bottomNavigation.setSelectedItemId(R.id.nav_expenses);
+            } else if (itemId == R.id.nav_charts) {
+                bottomNavigation.setSelectedItemId(R.id.nav_charts);
+                // fragment = new ChartsFragment();
+                Toast.makeText(this, "Раздел Графики в разработке", Toast.LENGTH_SHORT).show();
+                drawerLayout.close();
+                return true;
             } else if (itemId == R.id.nav_goals) {
                 fragment = new GoalsFragment();
                 bottomNavigation.setSelectedItemId(R.id.nav_goals);
             } else if (itemId == R.id.nav_profile) {
                 fragment = new ProfileFragment();
                 bottomNavigation.setSelectedItemId(R.id.nav_profile);
-            }
-            else if (itemId == getResources().getIdentifier("nav_currency", "id", getPackageName())) {
+            } else if (itemId == R.id.nav_settings) {
+                fragment = new SettingsFragment();
+                bottomNavigation.setSelectedItemId(R.id.nav_settings);
+            } else if (itemId == getResources().getIdentifier("nav_currency", "id", getPackageName())) {
                 fragment = new CurrencyFragment();
                 clearBottomNavigationSelection();
-            } else if (itemId == getResources().getIdentifier("nav_settings", "id", getPackageName())) {
-                fragment = new SettingsFragment();
+            } else if (itemId == getResources().getIdentifier("nav_income", "id", getPackageName())) {
+                // Доходы теперь доступны только через быстрые кнопки на главной
+                fragment = new IncomeFragment();
+                clearBottomNavigationSelection();
+            } else if (itemId == getResources().getIdentifier("nav_expenses", "id", getPackageName())) {
+                // Расходы теперь доступны только через быстрые кнопки на главной
+                fragment = new ExpensesFragment();
                 clearBottomNavigationSelection();
             }
 
             if (fragment != null) {
-                loadFragment(fragment);
+                loadFragmentWithAnimation(fragment,
+                        R.anim.fade_in_from_point,
+                        R.anim.fade_out_to_point);
             }
 
             drawerLayout.close();
             return true;
         });
+    }
+    public void loadFragmentWithAnimation(Fragment fragment, int enterAnim, int exitAnim) {
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction();
+
+        if (enterAnim != 0 && exitAnim != 0) {
+            // Указываем анимации для входа, выхода и обратные анимации для back stack
+            transaction.setCustomAnimations(enterAnim, exitAnim,
+                    R.anim.scale_in_from_bottom_fast, R.anim.scale_out_to_bottom);
+        }
+
+        transaction.replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit();
+
+        new Handler().postDelayed(() -> applyBackgroundToFragments(), 150);
     }
 
     private void clearBottomNavigationSelection() {
@@ -379,22 +422,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loadFragment(Fragment fragment) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragment_container, fragment)
-                .addToBackStack(null)
-                .commit();
-
-        // Применяем фон после загрузки фрагмента
-        new Handler().postDelayed(() -> applyBackgroundToFragments(), 100);
+        // Для обычной навигации тоже используем анимацию из нижней панели
+        loadFragmentWithAnimation(fragment,
+                R.anim.scale_in_from_bottom,
+                R.anim.scale_out_to_bottom);
     }
 
     public void showMainFragment() {
         bottomNavigation.setVisibility(View.VISIBLE);
+
+        FragmentTransaction transaction = getSupportFragmentManager()
+                .beginTransaction()
+                .setCustomAnimations(R.anim.scale_in_from_bottom_fast, R.anim.scale_out_to_bottom)
+                .replace(R.id.fragment_container, new MainFragment());
+
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, new MainFragment())
-                .commit();
+        transaction.commit();
 
         bottomNavigation.setSelectedItemId(R.id.nav_dashboard);
     }
