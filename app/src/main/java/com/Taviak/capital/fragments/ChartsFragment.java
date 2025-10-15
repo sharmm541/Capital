@@ -19,18 +19,45 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.Taviak.capital.R;
-import com.Taviak.capital.viewmodels.FinanceViewModel;
+import com.Taviak.capital.viewmodels.TransactionViewModel;
+import com.Taviak.capital.models.Transaction;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ChartsFragment extends Fragment {
 
-    private FinanceViewModel financeViewModel;
+    // Добавьте этот внутренний класс для данных графиков
+    public static class ChartData {
+        public float income;
+        public float expenses;
+        public List<Category> categories;
+
+        public ChartData(float income, float expenses, List<Category> categories) {
+            this.income = income;
+            this.expenses = expenses;
+            this.categories = categories;
+        }
+    }
+
+    public static class Category {
+        public String name;
+        public float amount;
+
+        public Category(String name, float amount) {
+            this.name = name;
+            this.amount = amount;
+        }
+    }
+
+    private TransactionViewModel transactionViewModel; // Используем TransactionViewModel
     private Spinner periodSpinner;
-    private ProgressBar incomeBar, expenseBar;
     private TextView incomeValueText, expenseValueText;
     private LinearLayout categoriesContainer;
     private TextView totalIncomeText, totalExpenseText, balanceText, financialTipsText;
@@ -44,6 +71,7 @@ public class ChartsFragment extends Fragment {
 
         initViews(view);
         setupPeriodSpinner();
+        setupViewModel();
         loadData();
 
         return view;
@@ -58,6 +86,10 @@ public class ChartsFragment extends Fragment {
         totalExpenseText = view.findViewById(R.id.totalExpenseText);
         balanceText = view.findViewById(R.id.balanceText);
         financialTipsText = view.findViewById(R.id.financialTipsText);
+    }
+
+    private void setupViewModel() {
+        transactionViewModel = new ViewModelProvider(requireActivity()).get(TransactionViewModel.class);
     }
 
     private void setupPeriodSpinner() {
@@ -83,18 +115,80 @@ public class ChartsFragment extends Fragment {
     }
 
     private void loadData() {
-        if (financeViewModel == null) {
-            financeViewModel = new ViewModelProvider(requireActivity()).get(FinanceViewModel.class);
+        if (transactionViewModel == null) {
+            return;
         }
 
-        financeViewModel.getChartData(selectedPeriod).observe(getViewLifecycleOwner(), chartData -> {
-            if (chartData != null) {
+        // Наблюдаем за транзакциями и рассчитываем данные для графиков
+        transactionViewModel.getAllTransactions().observe(getViewLifecycleOwner(), transactions -> {
+            if (transactions != null) {
+                ChartData chartData = calculateChartData(transactions);
                 updateUI(chartData);
             }
         });
     }
 
-    private void updateUI(FinanceViewModel.ChartData data) {
+    private ChartData calculateChartData(List<Transaction> transactions) {
+        float totalIncome = 0;
+        float totalExpenses = 0;
+        Map<String, Float> categoryMap = new HashMap<>();
+
+        Calendar filterCalendar = Calendar.getInstance();
+        Date now = new Date();
+
+        for (Transaction transaction : transactions) {
+            // Фильтрация по периоду
+            if (!isInPeriod(transaction.getDate(), now, selectedPeriod)) {
+                continue;
+            }
+
+            if (transaction.isIncome()) {
+                totalIncome += transaction.getAmount();
+            } else {
+                totalExpenses += transaction.getAmount();
+                // Для расходов группируем по категориям
+                String category = transaction.getCategory();
+                categoryMap.put(category, categoryMap.getOrDefault(category, 0f) + (float) transaction.getAmount());
+            }
+        }
+
+        // Создаем список категорий
+        List<Category> categories = new ArrayList<>();
+        for (Map.Entry<String, Float> entry : categoryMap.entrySet()) {
+            categories.add(new Category(entry.getKey(), entry.getValue()));
+        }
+
+        // Сортируем по убыванию суммы
+        categories.sort((c1, c2) -> Float.compare(c2.amount, c1.amount));
+
+        return new ChartData(totalIncome, totalExpenses, categories);
+    }
+
+    private boolean isInPeriod(Date transactionDate, Date currentDate, String period) {
+        Calendar transCal = Calendar.getInstance();
+        transCal.setTime(transactionDate);
+        Calendar currentCal = Calendar.getInstance();
+        currentCal.setTime(currentDate);
+
+        switch (period) {
+            case "today":
+                return transCal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR) &&
+                        transCal.get(Calendar.DAY_OF_YEAR) == currentCal.get(Calendar.DAY_OF_YEAR);
+            case "week":
+                Calendar weekAgo = (Calendar) currentCal.clone();
+                weekAgo.add(Calendar.DAY_OF_YEAR, -7);
+                return !transactionDate.before(weekAgo.getTime());
+            case "month":
+                return transCal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR) &&
+                        transCal.get(Calendar.MONTH) == currentCal.get(Calendar.MONTH);
+            case "year":
+                return transCal.get(Calendar.YEAR) == currentCal.get(Calendar.YEAR);
+            default:
+                return true;
+        }
+    }
+
+    private void updateUI(ChartData data) {
         // Обновляем статистику
         DecimalFormat formatter = new DecimalFormat("#,###₽");
         totalIncomeText.setText(formatter.format(data.income));
@@ -116,6 +210,8 @@ public class ChartsFragment extends Fragment {
         View incomeBar = getView().findViewById(R.id.incomeBar);
         View expenseBar = getView().findViewById(R.id.expenseBar);
 
+        if (incomeBar == null || expenseBar == null) return;
+
         if (income == 0 && expenses == 0) {
             ViewGroup.LayoutParams incomeParams = incomeBar.getLayoutParams();
             ViewGroup.LayoutParams expenseParams = expenseBar.getLayoutParams();
@@ -129,9 +225,8 @@ public class ChartsFragment extends Fragment {
             return;
         }
 
-        // Фиксированная максимальная высота (60% от доступного пространства)
-        int maxHeightPx = 180;
-
+        // Фиксированная максимальная высота
+        int maxHeightPx = 100;
         float max = Math.max(income, expenses);
         if (max == 0) max = 1;
 
@@ -156,7 +251,9 @@ public class ChartsFragment extends Fragment {
         expenseValueText.setText(formatMoney(expenses));
     }
 
-    private void updateCategoryChart(List<FinanceViewModel.Category> categories) {
+    private void updateCategoryChart(List<Category> categories) {
+        if (categoriesContainer == null) return;
+
         categoriesContainer.removeAllViews();
 
         if (categories.isEmpty()) {
@@ -171,19 +268,18 @@ public class ChartsFragment extends Fragment {
         }
 
         float total = 0;
-        for (FinanceViewModel.Category cat : categories) total += cat.amount;
+        for (Category cat : categories) total += cat.amount;
 
         String[] colors = {"#2196F3", "#FF9800", "#9C27B0", "#009688", "#FFEB3B", "#795548", "#607D8B", "#E91E63"};
 
         for (int i = 0; i < categories.size() && i < 8; i++) {
-            FinanceViewModel.Category cat = categories.get(i);
+            Category cat = categories.get(i);
             float percent = total > 0 ? (cat.amount / total) * 100 : 0;
 
             // Создаем layout для категории
             LinearLayout categoryLayout = new LinearLayout(requireContext());
             categoryLayout.setOrientation(LinearLayout.HORIZONTAL);
             categoryLayout.setPadding(16, 12, 16, 12);
-            categoryLayout.setBackgroundResource(R.drawable.category_item_background);
             categoryLayout.setLayoutParams(new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT
@@ -211,7 +307,6 @@ public class ChartsFragment extends Fragment {
             nameText.setText(cat.name);
             nameText.setTextColor(getResources().getColor(R.color.text_main_primary));
             nameText.setTextSize(14f);
-            nameText.setTypeface(getResources().getFont(R.font.inter_regular));
 
             // Сумма и процент
             TextView amountText = new TextView(requireContext());
@@ -223,7 +318,6 @@ public class ChartsFragment extends Fragment {
                     String.format(Locale.getDefault(), "%.1f%%", percent) + ")");
             amountText.setTextColor(getResources().getColor(R.color.text_main_secondary));
             amountText.setTextSize(12f);
-            amountText.setTypeface(getResources().getFont(R.font.inter_regular));
 
             categoryLayout.addView(colorView);
             categoryLayout.addView(nameText);
@@ -241,7 +335,9 @@ public class ChartsFragment extends Fragment {
         return drawable;
     }
 
-    private void updateTips(float income, float expenses, List<FinanceViewModel.Category> categories) {
+    private void updateTips(float income, float expenses, List<Category> categories) {
+        if (financialTipsText == null) return;
+
         List<String> tips = new ArrayList<>();
 
         if (income > 0 && expenses > 0) {
@@ -251,7 +347,7 @@ public class ChartsFragment extends Fragment {
         }
 
         if (!categories.isEmpty()) {
-            FinanceViewModel.Category main = categories.get(0);
+            Category main = categories.get(0);
             float percent = (main.amount / expenses) * 100;
             if (percent > 40) tips.add("🎯 Основные траты: " + main.name + " (" + String.format(Locale.getDefault(), "%.0f", percent) + "%)");
         }

@@ -88,21 +88,28 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
     }
 
     private void updateUI() {
+        if (getContext() == null) return;
+
         int totalProgress = goalManager.getOverallProgress();
         int completedCount = goalManager.getCompletedGoalsCount();
         int totalCount = goalManager.getTotalGoalsCount();
 
-        overallProgress.setText(totalProgress + "%");
-        completedGoals.setText("Выполнено: " + completedCount + "/" + totalCount + " целей");
-        progressBar.setProgress(totalProgress);
+        if (overallProgress != null) overallProgress.setText(totalProgress + "%");
+        if (completedGoals != null)
+            completedGoals.setText("Выполнено: " + completedCount + "/" + totalCount + " целей");
+        if (progressBar != null) progressBar.setProgress(totalProgress);
 
-        activeGoalsAdapter.updateGoals(goalManager.getActiveGoals());
-        completedGoalsAdapter.updateGoals(goalManager.getCompletedGoals());
+        if (activeGoalsAdapter != null)
+            activeGoalsAdapter.updateGoals(goalManager.getActiveGoals());
+        if (completedGoalsAdapter != null)
+            completedGoalsAdapter.updateGoals(goalManager.getCompletedGoals());
     }
 
     // Диалог создания цели
     private void showCreateGoalDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme);
+        if (getContext() == null) return;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.CustomDialogTheme);
         builder.setTitle("Новая цель");
 
         View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_goal_edit, null);
@@ -204,12 +211,16 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
     // Реализация методов интерфейса OnGoalActionListener
     @Override
     public void onEditGoal(Goal goal) {
-        showEditGoalDialog(goal);
+        if (getContext() != null) {
+            showEditGoalDialog(goal);
+        }
     }
 
     @Override
     public void onDeleteGoal(Goal goal) {
-        AlertDialog dialog = new AlertDialog.Builder(requireContext(), R.style.CustomDialogTheme)
+        if (getContext() == null) return;
+
+        AlertDialog dialog = new AlertDialog.Builder(getContext(), R.style.CustomDialogTheme)
                 .setTitle("Удаление цели")
                 .setMessage("Вы уверены, что хотите удалить цель \"" + goal.getTitle() + "\"?")
                 .setPositiveButton("Удалить", (dialogInterface, which) -> {
@@ -511,7 +522,11 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
 
     private void setupDatePicker(EditText deadlineInput) {
         deadlineInput.setFocusable(false);
-        deadlineInput.setOnClickListener(v -> showDatePickerDialog(deadlineInput));
+        deadlineInput.setOnClickListener(v -> {
+            if (getContext() != null) {
+                showDatePickerDialog(deadlineInput);
+            }
+        });
 
         // Также обрабатываем долгое нажатие для очистки
         deadlineInput.setOnLongClickListener(v -> {
@@ -521,44 +536,45 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
     }
 
     private void showDatePickerDialog(EditText deadlineInput) {
+        // Проверяем что фрагмент активен
+        if (getContext() == null || getActivity() == null) {
+            return;
+        }
+
         final Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(
-                requireContext(),
-                R.style.DatePickerDialogTheme,
-                (view, selectedYear, selectedMonth, selectedDay) -> {
-                    // Форматируем дату в нужный формат
-                    Calendar selectedDate = Calendar.getInstance();
-                    selectedDate.set(selectedYear, selectedMonth, selectedDay);
+        try {
+            // Создаем DatePickerDialog с правильным стилем
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    requireContext(),
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        // Форматируем дату в нужный формат
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(selectedYear, selectedMonth, selectedDay);
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
-                    String formattedDate = dateFormat.format(selectedDate.getTime());
-                    deadlineInput.setText(formattedDate);
-                },
-                year, month, day
-        );
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+                        String formattedDate = dateFormat.format(selectedDate.getTime());
+                        deadlineInput.setText(formattedDate);
+                    },
+                    year, month, day
+            );
 
-        // Устанавливаем минимальную дату - сегодня
-        datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+            // Устанавливаем минимальную дату - сегодня
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
-        datePickerDialog.show();
+            // Устанавливаем максимальную дату - 10 лет вперед
+            Calendar maxDate = Calendar.getInstance();
+            maxDate.add(Calendar.YEAR, 10);
+            datePickerDialog.getDatePicker().setMaxDate(maxDate.getTimeInMillis());
 
-        // Настраиваем кнопки DatePickerDialog
-        Button positiveButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE);
-        Button negativeButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE);
+            datePickerDialog.show();
 
-        if (positiveButton != null) {
-            positiveButton.setTextColor(getResources().getColor(R.color.accent_blue));
-            // Можно также изменить текст кнопки, если нужно
-            // positiveButton.setText("Выбрать");
-        }
-        if (negativeButton != null) {
-            negativeButton.setTextColor(getResources().getColor(R.color.text_main_secondary));
-            // Можно также изменить текст кнопки, если нужно
-            // negativeButton.setText("Отмена");
+        } catch (Exception e) {
+            // Альтернативный вариант если основной падает
+            //showSimpleDatePicker(deadlineInput);
         }
     }
 }

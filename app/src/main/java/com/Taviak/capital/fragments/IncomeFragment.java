@@ -1,4 +1,5 @@
 package com.Taviak.capital.fragments;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,7 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.Taviak.capital.R;
-import com.Taviak.capital.adapters.IncomeAdapter;
+import com.Taviak.capital.adapters.TransactionsAdapter;
 import com.Taviak.capital.models.Transaction;
 import com.Taviak.capital.viewmodels.TransactionViewModel;
 
@@ -34,10 +35,10 @@ public class IncomeFragment extends Fragment {
     private EditText amountInput, descriptionInput;
     private Spinner typeInput, categoryInput;
     private Button addButton, cancelButton;
-    private RecyclerView incomesRecyclerView;
+    private RecyclerView transactionsRecyclerView;
 
     // TextView для статистики
-    private TextView totalBalance, totalIncome, monthlyIncome, balanceAmount, balanceChange;
+    private TextView totalBalance, totalIncome, monthlyIncome;
 
     // Данные
     private List<Transaction> currentTransactions;
@@ -46,6 +47,7 @@ public class IncomeFragment extends Fragment {
 
     // ViewModel
     private TransactionViewModel transactionViewModel;
+    private TransactionsAdapter transactionsAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,11 +80,15 @@ public class IncomeFragment extends Fragment {
         // Кнопки
         addButton = view.findViewById(R.id.addIncomeButton);
         cancelButton = view.findViewById(R.id.cancelButton);
+
         // RecyclerView
-        incomesRecyclerView = view.findViewById(R.id.incomesRecyclerView);
-        if (incomesRecyclerView != null) {
-            incomesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        transactionsRecyclerView = view.findViewById(R.id.incomesRecyclerView);
+        if (transactionsRecyclerView != null) {
+            transactionsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            transactionsAdapter = new TransactionsAdapter(new ArrayList<>());
+            transactionsRecyclerView.setAdapter(transactionsAdapter);
         }
+
         totalIncome = view.findViewById(R.id.totalIncome);
         monthlyIncome = view.findViewById(R.id.monthlyIncome);
 
@@ -172,7 +178,7 @@ public class IncomeFragment extends Fragment {
         // Наблюдаем за общим балансом из базы данных
         transactionViewModel.getTotalBalance().observe(getViewLifecycleOwner(), balance -> {
             if (balance != null) {
-                importTotalBalance(balance);
+                updateTotalBalance(balance);
             }
         });
 
@@ -184,12 +190,12 @@ public class IncomeFragment extends Fragment {
         });
 
         // Наблюдаем за доходами для расчета месячных и отображения списка
-        transactionViewModel.getAllIncomes().observe(getViewLifecycleOwner(), incomes -> {
-            if (incomes != null) {
-                currentTransactions = incomes;
+        transactionViewModel.getAllIncomes().observe(getViewLifecycleOwner(), transactions -> {
+            if (transactions != null) {
+                currentTransactions = transactions;
                 updateCancelButtonState();
-                updateMonthlyIncome(incomes);
-                updateRecyclerView(incomes);
+                updateMonthlyIncome(transactions);
+                updateRecyclerView(transactions);
             }
         });
     }
@@ -199,15 +205,10 @@ public class IncomeFragment extends Fragment {
         cancelButton.setOnClickListener(v -> undoLastIncome());
     }
 
-    private void importTotalBalance(Double balance) {
+    private void updateTotalBalance(Double balance) {
         if (totalBalance != null) {
             String formattedBalance = formatCurrency(balance);
             totalBalance.setText(formattedBalance);
-        }
-
-        if (balanceAmount != null) {
-            String formattedBalance = formatCurrency(balance);
-            balanceAmount.setText(formattedBalance);
         }
     }
 
@@ -217,38 +218,32 @@ public class IncomeFragment extends Fragment {
         }
     }
 
-    private void updateMonthlyIncome(List<Transaction> incomes) {
+    private void updateMonthlyIncome(List<Transaction> transactions) {
         if (monthlyIncome != null) {
-            double monthlyTotal = calculateMonthlyIncome(incomes);
+            double monthlyTotal = calculateMonthlyIncome(transactions);
             monthlyIncome.setText(formatCurrency(monthlyTotal));
         }
     }
 
-    private void updateRecyclerView(List<Transaction> incomes) {
-        if (incomesRecyclerView != null) {
-            if (!incomes.isEmpty()) {
-                List<Transaction> sortedIncomes = new ArrayList<>(incomes);
-                Collections.sort(sortedIncomes, (i1, i2) -> i2.getDate().compareTo(i1.getDate()));
-
-                IncomeAdapter adapter = new IncomeAdapter(sortedIncomes);
-                incomesRecyclerView.setAdapter(adapter);
-            } else {
-                incomesRecyclerView.setAdapter(null);
-            }
+    private void updateRecyclerView(List<Transaction> transactions) {
+        if (transactionsAdapter != null) {
+            List<Transaction> sortedTransactions = new ArrayList<>(transactions);
+            Collections.sort(sortedTransactions, (t1, t2) -> t2.getDate().compareTo(t1.getDate()));
+            transactionsAdapter.updateTransactions(sortedTransactions);
         }
     }
 
-    private double calculateMonthlyIncome(List<Transaction> incomes) {
-        if (incomes == null || incomes.isEmpty()) {
+    private double calculateMonthlyIncome(List<Transaction> transactions) {
+        if (transactions == null || transactions.isEmpty()) {
             return 0.0;
         }
 
         Calendar currentMonth = Calendar.getInstance();
         double monthlyTotal = 0;
 
-        for (Transaction income : incomes) {
-            if (isDateInCurrentMonth(income.getDate(), currentMonth)) {
-                monthlyTotal += income.getAmount();
+        for (Transaction transaction : transactions) {
+            if (isDateInCurrentMonth(transaction.getDate(), currentMonth)) {
+                monthlyTotal += transaction.getAmount();
             }
         }
 
@@ -258,11 +253,11 @@ public class IncomeFragment extends Fragment {
     private boolean isDateInCurrentMonth(Date date, Calendar currentMonth) {
         if (date == null) return false;
 
-        Calendar incomeDate = Calendar.getInstance();
-        incomeDate.setTime(date);
+        Calendar transactionDate = Calendar.getInstance();
+        transactionDate.setTime(date);
 
-        return incomeDate.get(Calendar.YEAR) == currentMonth.get(Calendar.YEAR) &&
-                incomeDate.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH);
+        return transactionDate.get(Calendar.YEAR) == currentMonth.get(Calendar.YEAR) &&
+                transactionDate.get(Calendar.MONTH) == currentMonth.get(Calendar.MONTH);
     }
 
     private String formatCurrency(double amount) {
@@ -271,9 +266,9 @@ public class IncomeFragment extends Fragment {
 
     private void updateCancelButtonState() {
         if (cancelButton != null) {
-            boolean hasIncomes = currentTransactions != null && !currentTransactions.isEmpty();
-            cancelButton.setEnabled(hasIncomes);
-            cancelButton.setAlpha(hasIncomes ? 1.0f : 0.5f);
+            boolean hasTransactions = currentTransactions != null && !currentTransactions.isEmpty();
+            cancelButton.setEnabled(hasTransactions);
+            cancelButton.setAlpha(hasTransactions ? 1.0f : 0.5f);
         }
     }
 
@@ -291,8 +286,8 @@ public class IncomeFragment extends Fragment {
             double amount = Double.parseDouble(amountStr);
             Date currentDate = new Date();
 
-            Transaction income = new Transaction(amount, category, description, currentDate, type, true);
-            transactionViewModel.insert(income);
+            Transaction transaction = new Transaction(amount, category, description, currentDate, type, true);
+            transactionViewModel.insert(transaction);
 
             clearInputFields();
             showMessage("Успех", "Доход добавлен");
@@ -304,11 +299,11 @@ public class IncomeFragment extends Fragment {
 
     private void undoLastIncome() {
         if (currentTransactions != null && !currentTransactions.isEmpty()) {
-            Transaction lastIncome = findLatestTransaction();
-            if (lastIncome != null) {
-                transactionViewModel.delete(lastIncome);
+            Transaction lastTransaction = findLatestTransaction();
+            if (lastTransaction != null) {
+                transactionViewModel.delete(lastTransaction);
                 showMessage("Доход удален", String.format("Удален доход: %s - %.0f ₽",
-                        lastIncome.getType(), lastIncome.getAmount()));
+                        lastTransaction.getType(), lastTransaction.getAmount()));
             }
         }
     }
@@ -337,8 +332,47 @@ public class IncomeFragment extends Fragment {
     }
 
     private boolean validateInput() {
-        // Ваш существующий код валидации
-        return true;
+        boolean isValid = true;
+
+        // Проверка суммы
+        String amountStr = amountInput.getText().toString().trim();
+        if (amountStr.isEmpty()) {
+            amountInput.setError("Введите сумму");
+            isValid = false;
+        } else {
+            try {
+                double amount = Double.parseDouble(amountStr);
+                if (amount <= 0) {
+                    amountInput.setError("Сумма должна быть больше 0");
+                    isValid = false;
+                }
+            } catch (NumberFormatException e) {
+                amountInput.setError("Некорректная сумма");
+                isValid = false;
+            }
+        }
+
+        // Проверка типа
+        if (typeInput.getSelectedItemPosition() == 0) {
+            TextView errorText = (TextView) typeInput.getSelectedView();
+            if (errorText != null) {
+                errorText.setError("Выберите тип дохода");
+                errorText.setTextColor(getResources().getColor(R.color.error_main));
+            }
+            isValid = false;
+        }
+
+        // Проверка категории
+        if (categoryInput.getSelectedItemPosition() == 0) {
+            TextView errorText = (TextView) categoryInput.getSelectedView();
+            if (errorText != null) {
+                errorText.setError("Выберите категорию дохода");
+                errorText.setTextColor(getResources().getColor(R.color.error_main));
+            }
+            isValid = false;
+        }
+
+        return isValid;
     }
 
     private void showMessage(String title, String message) {

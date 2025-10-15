@@ -8,23 +8,23 @@ import android.content.Context;
 
 import com.Taviak.capital.converters.DateConverter;
 import com.Taviak.capital.entities.User;
-import com.Taviak.capital.entities.Income;
 import com.Taviak.capital.models.Transaction;
 import com.Taviak.capital.models.Goal;
 
 @Database(
-        entities = {User.class, Income.class, Transaction.class, Goal.class}, // Goal.class вместо GoalDao.class
-        version = 2, // Увеличьте версию
+        entities = {User.class, Transaction.class, Goal.class},
+        version = 2,
         exportSchema = false
 )
-@TypeConverters(DateConverter.class) // Добавьте конвертер здесь
+@TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase instance;
 
     public abstract TransactionDao transactionDao();
     public abstract UserDao userDao();
-    public abstract IncomeDao incomeDao();
     public abstract GoalDao goalDao();
+
+    // Убрали incomeDao()
 
     public static synchronized AppDatabase getDatabase(Context context) {
         if (instance == null) {
@@ -33,8 +33,8 @@ public abstract class AppDatabase extends RoomDatabase {
                             AppDatabase.class,
                             "capital-database"
                     )
-                    .fallbackToDestructiveMigration() // Пересоздаст базу при изменениях
-                    .allowMainThreadQueries() // Для упрощения разработки
+                    .fallbackToDestructiveMigration()
+                    .allowMainThreadQueries()
                     .build();
         }
         return instance;

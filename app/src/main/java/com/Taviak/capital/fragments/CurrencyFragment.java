@@ -194,15 +194,20 @@ public class CurrencyFragment extends Fragment {
         currencyToSpinner.setOnItemSelectedListener(spinnerListener);
     }
 
+    // В методе loadCurrencyData() замените на:
     private void loadCurrencyData() {
+        if (getContext() == null) return;
+
         currencyManager.fetchExchangeRates(new CurrencyManager.CurrencyCallback() {
             @Override
             public void onSuccess(List<Currency> currencies) {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        displayCurrencyRates(currencies);
-                        updateLastUpdateTime();
-                        Toast.makeText(requireContext(), "Курсы обновлены", Toast.LENGTH_SHORT).show();
+                        if (getContext() != null) {
+                            displayCurrencyRates(currencies);
+                            updateLastUpdateTime();
+                            Toast.makeText(getContext(), "Курсы обновлены", Toast.LENGTH_SHORT).show();
+                        }
                     });
                 }
             }
@@ -211,7 +216,9 @@ public class CurrencyFragment extends Fragment {
             public void onError(String message) {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        Toast.makeText(requireContext(), message + ". Используются кэшированные данные.", Toast.LENGTH_LONG).show();
+                        if (getContext() != null) {
+                            Toast.makeText(getContext(), message + ". Используются кэшированные данные.", Toast.LENGTH_LONG).show();
+                        }
                     });
                 }
             }

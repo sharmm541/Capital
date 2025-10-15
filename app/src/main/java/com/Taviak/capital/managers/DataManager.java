@@ -77,7 +77,6 @@ public class DataManager {
                     try {
                         appDatabase.transactionDao().deleteAllTransactions();
                         appDatabase.goalDao().deleteAllGoals();
-                        appDatabase.incomeDao().deleteAllIncomes();
                         appDatabase.userDao().deleteAllUsers();
 
                         // Закрываем базу данных

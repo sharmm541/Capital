@@ -172,22 +172,24 @@ public class ExpensesFragment extends Fragment {
         categoryInput.setAdapter(categoryAdapter);
     }
 
+    // В методе setupViewModel() добавьте проверки:
     private void setupViewModel() {
+        if (getContext() == null) return;
+
+        transactionViewModel = new ViewModelProvider(this).get(TransactionViewModel.class);
+
         // Наблюдаем за расходами из базы данных
         transactionViewModel.getAllExpenses().observe(getViewLifecycleOwner(), expenses -> {
-            if (expenses != null) {
+            if (expenses != null && adapter != null) {
                 adapter.updateTransactions(expenses);
-                // ДОБАВЬТЕ ЭТИ СТРОКИ - обновляем статистику при изменении данных
                 updateTotalExpenses(calculateTotalExpenses(expenses));
                 updateMonthlyExpenses(expenses);
             }
         });
-
         // Наблюдаем за общими расходами
         transactionViewModel.getTotalExpenses().observe(getViewLifecycleOwner(), total -> {
             if (total != null && totalExpenses != null) {
                 totalExpenses.setText(String.format("%.0f ₽", total));
-
             }
         });
     }
