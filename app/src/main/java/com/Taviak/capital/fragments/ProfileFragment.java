@@ -122,11 +122,15 @@ public class ProfileFragment extends Fragment {
     private void loadUserData() {
         FirebaseUser firebaseUser = mAuth.getCurrentUser();
         if (firebaseUser != null) {
+            Log.d("ProfileFragment", "Firebase user found: " + firebaseUser.getUid());
             new Thread(() -> {
                 try {
+                    // Проверяем существование таблицы и данные
                     currentUser = userDao.getUserByUid(firebaseUser.getUid());
+                    Log.d("ProfileFragment", "User from DB: " + (currentUser != null ? currentUser.getUserid() : "null"));
 
                     if (currentUser == null) {
+                        Log.d("ProfileFragment", "Creating new user in local DB");
                         currentUser = new User();
                         currentUser.setUserid(firebaseUser.getUid());
                         currentUser.setEmail(firebaseUser.getEmail());
@@ -134,23 +138,68 @@ public class ProfileFragment extends Fragment {
                                 firebaseUser.getDisplayName() : "Пользователь");
                         currentUser.setCreatedAt(System.currentTimeMillis());
                         currentUser.setLoggedin(true);
-                        userDao.insert(currentUser);
-                        Log.d("ProfileFragment", "New user created: " + firebaseUser.getUid());
+
+                        try {
+                            userDao.insert(currentUser);
+                            Log.d("ProfileFragment", "New user created successfully: " + firebaseUser.getUid());
+                        } catch (Exception insertError) {
+                            Log.e("ProfileFragment", "Error inserting user: " + insertError.getMessage(), insertError);
+                            requireActivity().runOnUiThread(() ->
+                                    Toast.makeText(requireContext(), "Ошибка создания пользователя", Toast.LENGTH_SHORT).show()
+                            );
+                            return;
+                        }
                     } else {
+                        Log.d("ProfileFragment", "Updating existing user");
                         currentUser.setLoggedin(true);
                         userDao.update(currentUser);
-                        Log.d("ProfileFragment", "Existing user logged in: " + firebaseUser.getUid());
+                        Log.d("ProfileFragment", "Existing user updated: " + firebaseUser.getUid());
                     }
 
-                    requireActivity().runOnUiThread(() -> updateUI());
+                    requireActivity().runOnUiThread(() -> {
+                        updateUI();
+                        //Toast.makeText(requireContext(), "Данные загружены", Toast.LENGTH_SHORT).show();
+                    });
 
                 } catch (Exception e) {
                     Log.e("ProfileFragment", "Error loading user data: " + e.getMessage(), e);
-                    requireActivity().runOnUiThread(() ->
-                            Toast.makeText(requireContext(), "Ошибка загрузки данных", Toast.LENGTH_SHORT).show()
-                    );
+                    requireActivity().runOnUiThread(() -> {
+                        Toast.makeText(requireContext(), "Ошибка загрузки данных", Toast.LENGTH_SHORT).show();
+                        // Показываем базовую информацию из Firebase
+                        showBasicFirebaseData(firebaseUser);
+                    });
                 }
             }).start();
+        } else {
+            Log.e("ProfileFragment", "No Firebase user found");
+            Toast.makeText(requireContext(), "Пользователь не авторизован", Toast.LENGTH_SHORT).show();
+            redirectToAuth();
+        }
+    }
+
+    private void showBasicFirebaseData(FirebaseUser firebaseUser) {
+        try {
+            userEmail.setText(firebaseUser.getEmail());
+            userNameEditText.setText(firebaseUser.getDisplayName() != null ?
+                    firebaseUser.getDisplayName() : "Пользователь");
+            registrationDateText.setText("Сегодня");
+
+            totalTransactionsText.setText("0");
+            totalBalanceText.setText("0 ₽");
+            totalBalanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.accent_green));
+        } catch (Exception e) {
+            Log.e("ProfileFragment", "Error showing basic data: " + e.getMessage(), e);
+        }
+    }
+
+    private void redirectToAuth() {
+        try {
+            Intent intent = new Intent(requireContext(), AuthActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            requireActivity().finish();
+        } catch (Exception e) {
+            Log.e("ProfileFragment", "Error redirecting to auth: " + e.getMessage(), e);
         }
     }
 
