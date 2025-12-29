@@ -4,30 +4,50 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/surface_main">
+    android:padding="20dp"
+    android:background="@drawable/dialog_background">
 
     <!-- Информация о текущем прогрессе -->
-    <TextView
-        android:id="@+id/progressInfo"
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="Текущий прогресс: 0.00 / 0.00 ₽ (0%)"
-        android:textColor="@color/text_main_primary"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/surface_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp">
+
+            <TextView
+                android:id="@+id/progressInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Текущий прогресс: 0.00 / 0.00 ₽ (0%)"
+                android:textColor="@color/text_main_primary"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxBackgroundColor="@color/input_background"
+        app:boxBackgroundMode="outline"
         app:boxCornerRadiusBottomEnd="12dp"
         app:boxCornerRadiusBottomStart="12dp"
         app:boxCornerRadiusTopEnd="12dp"
         app:boxCornerRadiusTopStart="12dp"
         app:hintTextColor="@color/text_main_secondary"
-        app:boxStrokeColor="@color/border_light">
+        app:boxStrokeColor="@color/border_light"
+        app:startIconDrawable="@drawable/ic_money"
+        app:endIconMode="clear_text">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/amountInput"

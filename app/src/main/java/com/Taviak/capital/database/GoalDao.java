@@ -14,14 +14,24 @@ public interface GoalDao {
     @Query("SELECT * FROM goals ORDER BY priority DESC, deadline ASC")
     List<Goal> getAllGoals();
 
-    @Query("SELECT * FROM goals WHERE completed = 0 ORDER BY priority DESC, deadline ASC")
+    @Query("SELECT * FROM goals WHERE status = 0 ORDER BY priority DESC, deadline ASC")
     List<Goal> getActiveGoals();
+
+    @Query("SELECT * FROM goals WHERE status = 1 ORDER BY priority DESC, deadline ASC")
+    List<Goal> getInactiveGoals();
+
+    @Query("SELECT * FROM goals WHERE status = 2 ORDER BY createdAt DESC")
+    List<Goal> getClosedGoals();
 
     @Query("SELECT * FROM goals WHERE completed = 1 ORDER BY createdAt DESC")
     List<Goal> getCompletedGoals();
 
     @Query("SELECT * FROM goals WHERE id = :id")
     Goal getGoalById(int id);
+
+    // Получить цели с приближающимся дедлайном
+    @Query("SELECT * FROM goals WHERE status = 0 AND deadline IS NOT NULL AND deadline <= :thresholdDate AND deadline > :currentDate")
+    List<Goal> getGoalsWithApproachingDeadline(long thresholdDate, long currentDate);
 
     @Insert
     void insert(Goal goal);
@@ -41,6 +51,9 @@ public interface GoalDao {
     @Query("UPDATE goals SET currentAmount = :amount WHERE id = :id")
     void updateCurrentAmount(int id, double amount);
 
+    @Query("UPDATE goals SET status = :status WHERE id = :id")
+    void updateStatus(int id, int status);
+
     @Query("SELECT COUNT(*) FROM goals")
     int getTotalCount();
 
@@ -49,6 +62,7 @@ public interface GoalDao {
 
     @Query("SELECT AVG((currentAmount / targetAmount) * 100) FROM goals WHERE completed = 0")
     Double getAverageProgress();
+
     @Query("DELETE FROM goals")
     void deleteAllGoals();
 }

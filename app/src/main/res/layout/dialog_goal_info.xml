@@ -4,18 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="16dp"
-    android:background="@color/surface_main">
+    android:padding="20dp"
+    android:background="@drawable/dialog_background">
 
     <!-- Заголовок -->
     <TextView
         android:id="@+id/titleText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="12dp"
         android:text="Название цели"
         android:textColor="@color/text_main_primary"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold" />
 
     <!-- Описание -->
@@ -23,121 +23,155 @@
         android:id="@+id/descriptionText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="20dp"
         android:text="Описание цели"
         android:textColor="@color/text_main_secondary"
-        android:textSize="14sp" />
-
-    <!-- Сумма -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Сумма:"
-            android:textColor="@color/text_main_secondary"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/amountText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0.00 / 0.00 ₽"
-            android:textColor="@color/text_main_primary"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
-    <!-- Прогресс -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Прогресс:"
-            android:textColor="@color/text_main_secondary"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/progressText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0%"
-            android:textColor="@color/text_main_secondary"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
+        android:textSize="16sp" />
 
     <!-- Прогресс бар -->
     <com.google.android.material.progressindicator.LinearProgressIndicator
         android:id="@+id/progressBar"
         android:layout_width="match_parent"
-        android:layout_height="8dp"
+        android:layout_height="12dp"
         android:layout_marginBottom="16dp"
         android:progress="0"
         app:trackColor="@color/divider_main"
-        app:trackCornerRadius="4dp"
+        app:trackCornerRadius="6dp"
         app:indicatorColor="@color/accent_green" />
 
-    <!-- Дата создания -->
-    <LinearLayout
+    <!-- Прогресс в процентах -->
+    <TextView
+        android:id="@+id/progressText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:orientation="horizontal">
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:text="0%"
+        android:textColor="@color/accent_green"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Создана:"
-            android:textColor="@color/text_main_secondary"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/createdAtText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="01.01.2024"
-            android:textColor="@color/text_main_primary"
-            android:textSize="12sp" />
-
-    </LinearLayout>
-
-    <!-- Дедлайн -->
-    <LinearLayout
+    <!-- Информация о сумме -->
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="16dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/surface_card">
 
-        <TextView
-            android:layout_width="0dp"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Срок:"
-            android:textColor="@color/text_main_secondary"
-            android:textSize="12sp" />
+            android:orientation="vertical"
+            android:padding="12dp">
 
-        <TextView
-            android:id="@+id/deadlineText"
-            android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/amountText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="0.00 / 0.00 ₽"
+                android:textColor="@color/text_main_primary"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Даты -->
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="1dp"
+        app:cardBackgroundColor="@color/surface_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Без срока"
-            android:textColor="@color/text_main_primary"
-            android:textSize="12sp" />
+            android:orientation="vertical"
+            android:padding="12dp">
 
-    </LinearLayout>
+            <!-- Дата создания -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Создана:"
+                    android:textColor="@color/text_main_secondary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/createdAtText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01.01.2024"
+                    android:textColor="@color/text_main_primary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- Дедлайн -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Срок:"
+                    android:textColor="@color/text_main_secondary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/deadlineText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Без срока"
+                    android:textColor="@color/text_main_primary"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <!-- Дата закрытия (только для завершенных) -->
+            <LinearLayout
+                android:id="@+id/completedAtContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Завершена:"
+                    android:textColor="@color/text_main_secondary"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/completedAtText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="01.01.2024"
+                    android:textColor="@color/status_success"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </LinearLayout>

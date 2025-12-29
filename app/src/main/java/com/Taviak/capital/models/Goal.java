@@ -22,12 +22,16 @@ public class Goal {
     private boolean completed;
     private String category;
     private int priority; // 1 - низкий, 2 - средний, 3 - высокий
+    private int status; // 0 - активная, 1 - неактивная, 2 - закрытая
+    private Date completedAt; // дата завершения цели
 
     public Goal() {
         this.createdAt = new Date();
         this.completed = false;
         this.currentAmount = 0;
         this.priority = 2;
+        this.status = 0; // По умолчанию активная
+        this.completedAt = null;
     }
 
     // Геттеры и сеттеры
@@ -61,6 +65,12 @@ public class Goal {
     public int getPriority() { return priority; }
     public void setPriority(int priority) { this.priority = priority; }
 
+    public int getStatus() { return status; }
+    public void setStatus(int status) { this.status = status; }
+
+    public Date getCompletedAt() { return completedAt; }
+    public void setCompletedAt(Date completedAt) { this.completedAt = completedAt; }
+
     // Расчет прогресса в процентах
     public int getProgress() {
         if (targetAmount == 0) return 0;
@@ -70,5 +80,22 @@ public class Goal {
     // Осталось собрать
     public double getRemainingAmount() {
         return targetAmount - currentAmount;
+    }
+
+    // Проверка на скорое завершение (менее 3 дней)
+    public boolean isDeadlineApproaching() {
+        if (deadline == null) return false;
+
+        long currentTime = System.currentTimeMillis();
+        long deadlineTime = deadline.getTime();
+        long threeDays = 3 * 24 * 60 * 60 * 1000L;
+
+        return (deadlineTime - currentTime) <= threeDays && (deadlineTime - currentTime) > 0;
+    }
+
+    // Проверка на просроченность
+    public boolean isOverdue() {
+        if (deadline == null) return false;
+        return deadline.getTime() < System.currentTimeMillis();
     }
 }

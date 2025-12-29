@@ -156,6 +156,107 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
+                <!-- Резервное копирование в облако -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_backup"
+                        android:tint="@color/text_main_secondary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:text="Резервная копия в облако"
+                        android:textColor="@color/text_main_primary"
+                        android:textSize="16sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/backupButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Создать"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/success_main"
+                        app:cornerRadius="12dp" />
+
+                </LinearLayout>
+
+                <!-- Восстановление из облака -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_restore"
+                        android:tint="@color/text_main_secondary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:text="Восстановить из облака"
+                        android:textColor="@color/text_main_primary"
+                        android:textSize="16sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/restoreButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Выбрать"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/status_info"
+                        app:cornerRadius="12dp" />
+
+                </LinearLayout>
+
+                <!-- Экспорт в Firestore -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_export"
+                        android:tint="@color/text_main_secondary" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:text="Экспорт в Firestore"
+                        android:textColor="@color/text_main_primary"
+                        android:textSize="16sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/exportButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Экспорт"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@color/warning_main"
+                        app:cornerRadius="12dp" />
+
+                </LinearLayout>
                 <!-- Очистка данных -->
                 <LinearLayout
                     android:layout_width="match_parent"

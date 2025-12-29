@@ -13,7 +13,7 @@ import com.Taviak.capital.models.Goal;
 
 @Database(
         entities = {User.class, Transaction.class, Goal.class},
-        version = 2,
+        version = 3,
         exportSchema = false
 )
 @TypeConverters(DateConverter.class)

@@ -35,6 +35,13 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalViewHold
         notifyDataSetChanged();
     }
 
+    public Goal getGoalAt(int position) {
+        if (position >= 0 && position < goals.size()) {
+            return goals.get(position);
+        }
+        return null;
+    }
+
     @NonNull
     @Override
     public GoalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -55,9 +62,10 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalViewHold
     }
 
     class GoalViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleText, amountText, progressText, deadlineText;
+        private TextView titleText, amountText, progressText, deadlineText, statusText;
         private ProgressBar progressBar;
         private ImageButton editButton, deleteButton, addAmountButton;
+        private View deadlineWarning, cardView;
 
         public GoalViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -65,13 +73,17 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalViewHold
             amountText = itemView.findViewById(R.id.goalAmount);
             progressText = itemView.findViewById(R.id.goalProgress);
             deadlineText = itemView.findViewById(R.id.goalDeadline);
+            statusText = itemView.findViewById(R.id.goalStatus);
             progressBar = itemView.findViewById(R.id.goalProgressBar);
             editButton = itemView.findViewById(R.id.editGoalButton);
             deleteButton = itemView.findViewById(R.id.deleteGoalButton);
             addAmountButton = itemView.findViewById(R.id.addAmountButton);
+            deadlineWarning = itemView.findViewById(R.id.deadlineWarning);
+            cardView = itemView.findViewById(R.id.cardView);
         }
 
         public void bind(Goal goal) {
+            // Устанавливаем базовые данные
             titleText.setText(goal.getTitle());
             amountText.setText(String.format("%s / %s ₽",
                     amountFormat.format(goal.getCurrentAmount()),
@@ -81,26 +93,88 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalViewHold
             progressText.setText(progress + "%");
             progressBar.setProgress(progress);
 
+            // Отображаем дедлайн с предупреждением
             if (goal.getDeadline() != null) {
                 deadlineText.setText("До " + dateFormat.format(goal.getDeadline()));
+
+                // Показываем предупреждение если дедлайн приближается
+                if (goal.isDeadlineApproaching()) {
+                    deadlineWarning.setVisibility(View.VISIBLE);
+                    deadlineText.setTextColor(itemView.getContext().getColor(R.color.status_warning));
+                } else if (goal.isOverdue()) {
+                    deadlineWarning.setVisibility(View.VISIBLE);
+                    deadlineText.setTextColor(itemView.getContext().getColor(R.color.status_error));
+                    deadlineText.setText("Просрочено: " + dateFormat.format(goal.getDeadline()));
+                } else {
+                    deadlineWarning.setVisibility(View.GONE);
+                    deadlineText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
+                }
             } else {
                 deadlineText.setText("Без срока");
+                deadlineWarning.setVisibility(View.GONE);
+                deadlineText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
             }
 
-            // Настройка видимости кнопок в зависимости от статуса цели
-            if (goal.isCompleted()) {
-                addAmountButton.setVisibility(View.GONE);
-                editButton.setVisibility(View.GONE);
-                progressText.setTextColor(itemView.getContext().getColor(R.color.status_success));
-            } else {
-                addAmountButton.setVisibility(View.VISIBLE);
-                editButton.setVisibility(View.VISIBLE);
-                progressText.setTextColor(itemView.getContext().getColor(R.color.accent_blue));
+            // Настраиваем внешний вид в зависимости от статуса
+            switch (goal.getStatus()) {
+                case 0: // Активная
+                    statusText.setText("Активная");
+                    statusText.setTextColor(itemView.getContext().getColor(R.color.status_success));
+                    setActiveAppearance();
+                    break;
+
+                case 1: // Неактивная
+                    statusText.setText("Неактивная");
+                    statusText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
+                    setInactiveAppearance();
+                    break;
+
+                case 2: // Закрытая
+                    statusText.setText("Закрытая");
+                    statusText.setTextColor(itemView.getContext().getColor(R.color.status_success));
+                    setClosedAppearance();
+                    break;
             }
 
-            // Обработчики кликов
+            setupClickListeners(goal);
+        }
+
+        private void setActiveAppearance() {
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+            addAmountButton.setVisibility(View.VISIBLE);
+
+            titleText.setTextColor(itemView.getContext().getColor(R.color.text_main_primary));
+            amountText.setTextColor(itemView.getContext().getColor(R.color.text_main_primary));
+            progressText.setTextColor(itemView.getContext().getColor(R.color.text_main_primary));
+            cardView.setAlpha(1.0f);
+        }
+
+        private void setInactiveAppearance() {
+            editButton.setVisibility(View.VISIBLE);
+            deleteButton.setVisibility(View.VISIBLE);
+            addAmountButton.setVisibility(View.GONE);
+
+            titleText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
+            amountText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
+            progressText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
+            cardView.setAlpha(0.8f);
+        }
+
+        private void setClosedAppearance() {
+            editButton.setVisibility(View.GONE);
+            deleteButton.setVisibility(View.VISIBLE);
+            addAmountButton.setVisibility(View.GONE);
+
+            titleText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
+            amountText.setTextColor(itemView.getContext().getColor(R.color.text_main_secondary));
+            progressText.setTextColor(itemView.getContext().getColor(R.color.status_success));
+            cardView.setAlpha(1.0f);
+        }
+
+        private void setupClickListeners(Goal goal) {
             editButton.setOnClickListener(v -> {
-                if (listener != null) {
+                if (listener != null && goal.getStatus() != 2) { // Нельзя редактировать закрытые
                     listener.onEditGoal(goal);
                 }
             });
@@ -112,7 +186,7 @@ public class GoalsAdapter extends RecyclerView.Adapter<GoalsAdapter.GoalViewHold
             });
 
             addAmountButton.setOnClickListener(v -> {
-                if (listener != null) {
+                if (listener != null && goal.getStatus() == 0) { // Только для активных
                     listener.onAddAmount(goal);
                 }
             });

@@ -59,10 +59,6 @@ public class AuthManager {
         sharedPreferences.edit().putBoolean(KEY_LOGGED_IN, loggedIn).apply();
     }
 
-    // УДАЛИТЕ этот метод, чтобы избежать путаницы
-    // public boolean isLoggedIn() {
-    //     return isUserLoggedIn();
-    // }
 
     public void setUserId(String userId) {
         sharedPreferences.edit().putString(KEY_USER_ID, userId).apply();

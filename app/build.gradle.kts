@@ -50,6 +50,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.database)
+    implementation("com.google.code.gson:gson:2.10.1")
 
     // Room Database (если используется)
     implementation(libs.room.runtime)

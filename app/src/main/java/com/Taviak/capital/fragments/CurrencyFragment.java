@@ -1,13 +1,16 @@
 package com.Taviak.capital.fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,8 +32,9 @@ public class CurrencyFragment extends Fragment {
     private TextView usdChange, eurChange, cnyChange;
     private TextView lastUpdateText;
     private Spinner currencyFromSpinner, currencyToSpinner;
-    private TextView conversionResult;
+    private TextView conversionResult, conversionResultTitle;
     private EditText amountInput;
+    private ImageButton swapCurrenciesButton;
     private CurrencyManager currencyManager;
 
     private String[] currencyNames = {
@@ -54,8 +58,13 @@ public class CurrencyFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_currency, container, false);
 
         initViews(view);
-        setupCurrencyManager();
+
+        // Инициализируем CurrencyManager с контекстом фрагмента
+        currencyManager = new CurrencyManager(requireContext());
+
         setupSpinners();
+        setupSwapButton();
+        setupAmountInputListener();
 
         // Сначала показываем кэшированные данные
         displayCurrencyRates(currencyManager.getCurrencies());
@@ -78,22 +87,17 @@ public class CurrencyFragment extends Fragment {
         currencyFromSpinner = view.findViewById(R.id.currencyFromSpinner);
         currencyToSpinner = view.findViewById(R.id.currencyToSpinner);
         conversionResult = view.findViewById(R.id.conversionResult);
+        conversionResultTitle = view.findViewById(R.id.conversionResultTitle);
         amountInput = view.findViewById(R.id.amountInput);
+        swapCurrenciesButton = view.findViewById(R.id.swapCurrenciesButton);
 
-        // Добавьте этот TextView в ваш layout
         lastUpdateText = view.findViewById(R.id.lastUpdateText);
 
-        view.findViewById(R.id.convertButton).setOnClickListener(v -> onConvertButtonClick());
-
-        // Кнопка для ручного обновления курсов
-        view.findViewById(R.id.convertButton).setOnLongClickListener(v -> {
+        // Добавляем возможность обновления долгим нажатием на заголовок
+        lastUpdateText.setOnLongClickListener(v -> {
             refreshRates();
             return true;
         });
-    }
-
-    private void setupCurrencyManager() {
-        currencyManager = new CurrencyManager(requireContext());
     }
 
     private void setupSpinners() {
@@ -173,16 +177,16 @@ public class CurrencyFragment extends Fragment {
         toAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         currencyToSpinner.setAdapter(toAdapter);
 
-        // Устанавливаем начальные значения (пропускаем первый элемент, так как он disabled)
-        currencyFromSpinner.setSelection(1); // USD (второй элемент)
-        currencyToSpinner.setSelection(2);   // EUR (третий элемент)
+        // Устанавливаем начальные значения
+        currencyFromSpinner.setSelection(1); // USD
+        currencyToSpinner.setSelection(2);   // EUR
 
         // Слушатель изменений для автоматической конвертации
         AdapterView.OnItemSelectedListener spinnerListener = new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (!TextUtils.isEmpty(amountInput.getText().toString()) && position != 0) {
-                    onConvertButtonClick();
+                if (position != 0) {
+                    performConversion();
                 }
             }
 
@@ -194,20 +198,52 @@ public class CurrencyFragment extends Fragment {
         currencyToSpinner.setOnItemSelectedListener(spinnerListener);
     }
 
-    // В методе loadCurrencyData() замените на:
-    private void loadCurrencyData() {
-        if (getContext() == null) return;
+    private void setupSwapButton() {
+        swapCurrenciesButton.setOnClickListener(v -> swapCurrencies());
+    }
 
+    private void setupAmountInputListener() {
+        amountInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                performConversion();
+            }
+        });
+    }
+
+    private void swapCurrencies() {
+        int fromPosition = currencyFromSpinner.getSelectedItemPosition();
+        int toPosition = currencyToSpinner.getSelectedItemPosition();
+
+        // Проверяем что выбраны не заголовки
+        if (fromPosition == 0 || toPosition == 0) {
+            Toast.makeText(requireContext(), "Выберите валюты для обмена", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Меняем местами
+        currencyFromSpinner.setSelection(toPosition);
+        currencyToSpinner.setSelection(fromPosition);
+
+        // Обновляем результат
+        performConversion();
+    }
+
+    private void loadCurrencyData() {
         currencyManager.fetchExchangeRates(new CurrencyManager.CurrencyCallback() {
             @Override
             public void onSuccess(List<Currency> currencies) {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (getContext() != null) {
-                            displayCurrencyRates(currencies);
-                            updateLastUpdateTime();
-                            Toast.makeText(getContext(), "Курсы обновлены", Toast.LENGTH_SHORT).show();
-                        }
+                        displayCurrencyRates(currencies);
+                        updateLastUpdateTime();
+                        Toast.makeText(getContext(), "Курсы обновлены", Toast.LENGTH_SHORT).show();
                     });
                 }
             }
@@ -216,9 +252,7 @@ public class CurrencyFragment extends Fragment {
             public void onError(String message) {
                 if (getActivity() != null) {
                     getActivity().runOnUiThread(() -> {
-                        if (getContext() != null) {
-                            Toast.makeText(getContext(), message + ". Используются кэшированные данные.", Toast.LENGTH_LONG).show();
-                        }
+                        Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
                     });
                 }
             }
@@ -242,27 +276,36 @@ public class CurrencyFragment extends Fragment {
         }
 
         for (Currency currency : currencies) {
+            String changeText = formatChange(currency.getChange());
+            int colorRes = currency.isPositiveChange() ? R.color.status_success : R.color.status_error;
+
             switch (currency.getCode()) {
                 case "USD":
                     usdRate.setText(String.format(Locale.US, "%.2f ₽", currency.getRate()));
-                    usdChange.setText(String.format(Locale.US, "%.1f%%", currency.getChange()));
-                    usdChange.setTextColor(getColor(currency.isPositiveChange() ?
-                            R.color.status_success : R.color.status_error));
+                    usdChange.setText(changeText);
+                    usdChange.setTextColor(getColor(colorRes));
                     break;
                 case "EUR":
                     eurRate.setText(String.format(Locale.US, "%.2f ₽", currency.getRate()));
-                    eurChange.setText(String.format(Locale.US, "%.1f%%", currency.getChange()));
-                    eurChange.setTextColor(getColor(currency.isPositiveChange() ?
-                            R.color.status_success : R.color.status_error));
+                    eurChange.setText(changeText);
+                    eurChange.setTextColor(getColor(colorRes));
                     break;
                 case "CNY":
                     cnyRate.setText(String.format(Locale.US, "%.2f ₽", currency.getRate()));
-                    cnyChange.setText(String.format(Locale.US, "%.1f%%", currency.getChange()));
-                    cnyChange.setTextColor(getColor(currency.isPositiveChange() ?
-                            R.color.status_success : R.color.status_error));
+                    cnyChange.setText(changeText);
+                    cnyChange.setTextColor(getColor(colorRes));
                     break;
             }
         }
+    }
+
+    private String formatChange(double change) {
+        if (change == 0) {
+            return "0.00";
+        }
+
+        String sign = change > 0 ? "+" : "";
+        return String.format(Locale.US, "%s%.2f", sign, change);
     }
 
     private void updateLastUpdateTime() {
@@ -277,17 +320,19 @@ public class CurrencyFragment extends Fragment {
         return requireContext().getColor(colorRes);
     }
 
-    private void onConvertButtonClick() {
+    private void performConversion() {
         String amountStr = amountInput.getText().toString();
         if (TextUtils.isEmpty(amountStr)) {
-            conversionResult.setText("Введите сумму");
+            conversionResultTitle.setText("Введите сумму для конвертации");
+            conversionResult.setText("");
             return;
         }
 
         try {
             double amount = Double.parseDouble(amountStr);
             if (amount <= 0) {
-                conversionResult.setText("Сумма должна быть больше 0");
+                conversionResultTitle.setText("Сумма должна быть больше 0");
+                conversionResult.setText("");
                 return;
             }
 
@@ -296,12 +341,14 @@ public class CurrencyFragment extends Fragment {
 
             // Проверяем что выбраны не заголовки
             if (fromPosition == 0 || toPosition == 0) {
-                conversionResult.setText("Выберите валюты");
+                conversionResultTitle.setText("Выберите валюты для конвертации");
+                conversionResult.setText("");
                 return;
             }
 
             if (fromPosition == toPosition) {
-                conversionResult.setText("Выберите разные валюты");
+                conversionResultTitle.setText("Выберите разные валюты");
+                conversionResult.setText("");
                 return;
             }
 
@@ -311,15 +358,21 @@ public class CurrencyFragment extends Fragment {
             double result = currencyManager.convertCurrency(amount, fromCurrency, toCurrency);
 
             if (result > 0) {
-                conversionResult.setText(String.format("%s %s = %s %s",
+                conversionResultTitle.setText(String.format("%s %s → %s %s",
                         formatNumber(amount), fromCurrency,
                         formatNumber(result), toCurrency));
+                conversionResult.setText(String.format("1 %s = %s %s",
+                        fromCurrency,
+                        formatNumber(result / amount),
+                        toCurrency));
             } else {
-                conversionResult.setText("Ошибка конвертации");
+                conversionResultTitle.setText("Ошибка конвертации");
+                conversionResult.setText("");
             }
 
         } catch (NumberFormatException e) {
-            conversionResult.setText("Неверный формат числа");
+            conversionResultTitle.setText("Неверный формат числа");
+            conversionResult.setText("");
         }
     }
 

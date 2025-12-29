@@ -9,17 +9,23 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import com.Taviak.capital.managers.GoalManager;
+import com.Taviak.capital.models.Goal;
+
 import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 public class NotificationReceiver extends BroadcastReceiver {
 
     private static final String CHANNEL_ID = "capital_app_channel";
+    private static final int DEADLINE_NOTIFICATION_ID = 1001;
 
     @Override
     public void onReceive(Context context, Intent intent) {
         if ("SHOW_FINANCE_NOTIFICATION".equals(intent.getAction())) {
             showRandomFinanceNotification(context);
+            checkDeadlineNotifications(context); // Проверяем дедлайны
 
             // Проверяем настройки перед планированием следующего уведомления
             SharedPreferences prefs = context.getSharedPreferences("app_settings", Context.MODE_PRIVATE);
@@ -28,6 +34,8 @@ public class NotificationReceiver extends BroadcastReceiver {
             if (notificationsEnabled) {
                 scheduleNextNotification(context);
             }
+        } else if ("CHECK_DEADLINES".equals(intent.getAction())) {
+            checkDeadlineNotifications(context);
         }
     }
 
@@ -57,6 +65,68 @@ public class NotificationReceiver extends BroadcastReceiver {
 
         if (notificationManager.areNotificationsEnabled()) {
             notificationManager.notify(random.nextInt(1000), builder.build());
+        }
+    }
+
+    private void checkDeadlineNotifications(Context context) {
+        GoalManager goalManager = new GoalManager(context);
+        List<Goal> approachingGoals = goalManager.getGoalsWithApproachingDeadline();
+
+        for (Goal goal : approachingGoals) {
+            showDeadlineNotification(context, goal);
+        }
+
+        // Планируем следующую проверку дедлайнов
+        scheduleDeadlineCheck(context);
+    }
+
+    private void showDeadlineNotification(Context context, Goal goal) {
+        String message = String.format("Цель \"%s\" заканчивается %s! Успейте завершить!",
+                goal.getTitle(),
+                new java.text.SimpleDateFormat("dd.MM.yyyy", java.util.Locale.getDefault()).format(goal.getDeadline()));
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_warning)
+                .setContentTitle("Срок цели подходит к концу!")
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(message));
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        if (notificationManager.areNotificationsEnabled()) {
+            notificationManager.notify(DEADLINE_NOTIFICATION_ID + goal.getId(), builder.build());
+        }
+    }
+
+    private void scheduleDeadlineCheck(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 12); // Проверяем каждые 12 часов
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent deadlineIntent = new Intent(context, NotificationReceiver.class);
+        deadlineIntent.setAction("CHECK_DEADLINES");
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                context,
+                2002,
+                deadlineIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    pendingIntent
+            );
+        } else {
+            alarmManager.set(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    pendingIntent
+            );
         }
     }
 

@@ -4,6 +4,8 @@ import android.content.Context;
 import com.Taviak.capital.database.AppDatabase;
 import com.Taviak.capital.database.GoalDao;
 import com.Taviak.capital.models.Goal;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -39,6 +41,23 @@ public class GoalManager {
         executor.execute(() -> {
             try {
                 goalDao.update(goal);
+                if (callback != null) {
+                    callback.onSuccess(goal);
+                }
+            } catch (Exception e) {
+                if (callback != null) {
+                    callback.onError(e.getMessage());
+                }
+            }
+        });
+    }
+
+    // Обновление статуса цели
+    public void updateGoalStatus(int goalId, int status, GoalCallback callback) {
+        executor.execute(() -> {
+            try {
+                goalDao.updateStatus(goalId, status);
+                Goal goal = goalDao.getGoalById(goalId);
                 if (callback != null) {
                     callback.onSuccess(goal);
                 }
@@ -86,6 +105,7 @@ public class GoalManager {
                     if (newAmount >= goal.getTargetAmount()) {
                         goal.setCompleted(true);
                         goal.setCurrentAmount(goal.getTargetAmount()); // Не превышаем целевую сумму
+                        goal.setStatus(2); // Перемещаем в закрытые
                     }
 
                     goalDao.update(goal);
@@ -109,10 +129,20 @@ public class GoalManager {
     public void markGoalAsCompleted(int goalId, GoalCallback callback) {
         executor.execute(() -> {
             try {
-                goalDao.markAsCompleted(goalId);
                 Goal goal = goalDao.getGoalById(goalId);
-                if (callback != null) {
-                    callback.onSuccess(goal);
+                if (goal != null) {
+                    goal.setCompleted(true);
+                    goal.setStatus(2);
+                    goal.setCompletedAt(new Date());
+                    goalDao.update(goal);
+
+                    if (callback != null) {
+                        callback.onSuccess(goal);
+                    }
+                } else {
+                    if (callback != null) {
+                        callback.onError("Цель не найдена");
+                    }
                 }
             } catch (Exception e) {
                 if (callback != null) {
@@ -132,10 +162,36 @@ public class GoalManager {
         }
     }
 
-    // Получить выполненные цели
-    public List<Goal> getCompletedGoals() {
+    // Получить неактивные цели
+    public List<Goal> getInactiveGoals() {
         try {
-            return goalDao.getCompletedGoals();
+            return goalDao.getInactiveGoals();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new java.util.ArrayList<>();
+        }
+    }
+
+    // Получить закрытые цели
+    public List<Goal> getClosedGoals() {
+        try {
+            return goalDao.getClosedGoals();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new java.util.ArrayList<>();
+        }
+    }
+
+    // Получить цели с приближающимся дедлайном
+    public List<Goal> getGoalsWithApproachingDeadline() {
+        try {
+            Calendar calendar = Calendar.getInstance();
+            long currentDate = calendar.getTimeInMillis();
+
+            calendar.add(Calendar.DAY_OF_YEAR, 3); // 3 дня вперед
+            long thresholdDate = calendar.getTimeInMillis();
+
+            return goalDao.getGoalsWithApproachingDeadline(thresholdDate, currentDate);
         } catch (Exception e) {
             e.printStackTrace();
             return new java.util.ArrayList<>();

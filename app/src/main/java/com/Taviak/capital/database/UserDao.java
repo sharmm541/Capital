@@ -2,6 +2,7 @@ package com.Taviak.capital.database;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -37,5 +38,11 @@ public interface UserDao {
     byte[] getProfileImage();
     @Query("SELECT * FROM users WHERE userId = :uid LIMIT 1") // используем userId
     User getUserByUid(String uid);
+    @Delete
+    void deleteUser(User user);
+
+    // ИЛИ если есть метод для получения по ID:
+    @Query("DELETE FROM users WHERE userId = :userId")
+    void deleteUserById(int userId);
 
 }

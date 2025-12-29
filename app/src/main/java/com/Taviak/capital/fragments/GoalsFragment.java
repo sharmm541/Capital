@@ -2,6 +2,8 @@ package com.Taviak.capital.fragments;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -13,7 +15,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,20 +27,22 @@ import com.Taviak.capital.adapters.GoalsAdapter;
 import com.Taviak.capital.managers.GoalManager;
 import com.Taviak.capital.models.Goal;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalActionListener {
 
     private TextView overallProgress, completedGoals;
     private ProgressBar progressBar;
-    private RecyclerView activeGoalsRecyclerView, completedGoalsRecyclerView;
-    private GoalsAdapter activeGoalsAdapter, completedGoalsAdapter;
+    private RecyclerView activeGoalsRecyclerView, inactiveGoalsRecyclerView, closedGoalsRecyclerView;
+    private GoalsAdapter activeGoalsAdapter, inactiveGoalsAdapter, closedGoalsAdapter;
     private GoalManager goalManager;
     private MaterialButton addGoalButton;
     private DecimalFormat amountFormat = new DecimalFormat("#,##0.00");
@@ -61,8 +68,11 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
         overallProgress = view.findViewById(R.id.overallProgress);
         completedGoals = view.findViewById(R.id.completedGoals);
         progressBar = view.findViewById(R.id.progressBar);
+
+        // RecyclerViews
         activeGoalsRecyclerView = view.findViewById(R.id.activeGoalsRecyclerView);
-        completedGoalsRecyclerView = view.findViewById(R.id.completedGoalsRecyclerView);
+        inactiveGoalsRecyclerView = view.findViewById(R.id.inactiveGoalsRecyclerView);
+        closedGoalsRecyclerView = view.findViewById(R.id.closedGoalsRecyclerView);
 
         // Кнопка создания цели
         addGoalButton = view.findViewById(R.id.addGoalButton);
@@ -80,11 +90,17 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
         activeGoalsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         activeGoalsRecyclerView.setAdapter(activeGoalsAdapter);
 
-        // Завершенные цели
-        completedGoalsAdapter = new GoalsAdapter(goalManager.getCompletedGoals());
-        completedGoalsAdapter.setOnGoalActionListener(this);
-        completedGoalsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        completedGoalsRecyclerView.setAdapter(completedGoalsAdapter);
+        // Неактивные цели
+        inactiveGoalsAdapter = new GoalsAdapter(goalManager.getInactiveGoals());
+        inactiveGoalsAdapter.setOnGoalActionListener(this);
+        inactiveGoalsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        inactiveGoalsRecyclerView.setAdapter(inactiveGoalsAdapter);
+
+        // Закрытые цели
+        closedGoalsAdapter = new GoalsAdapter(goalManager.getClosedGoals());
+        closedGoalsAdapter.setOnGoalActionListener(this);
+        closedGoalsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        closedGoalsRecyclerView.setAdapter(closedGoalsAdapter);
     }
 
     private void updateUI() {
@@ -99,10 +115,42 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
             completedGoals.setText("Выполнено: " + completedCount + "/" + totalCount + " целей");
         if (progressBar != null) progressBar.setProgress(totalProgress);
 
+        // Обновляем все адаптеры
         if (activeGoalsAdapter != null)
             activeGoalsAdapter.updateGoals(goalManager.getActiveGoals());
-        if (completedGoalsAdapter != null)
-            completedGoalsAdapter.updateGoals(goalManager.getCompletedGoals());
+        if (inactiveGoalsAdapter != null)
+            inactiveGoalsAdapter.updateGoals(goalManager.getInactiveGoals());
+        if (closedGoalsAdapter != null)
+            closedGoalsAdapter.updateGoals(goalManager.getClosedGoals());
+
+        // Проверяем дедлайны и перемещаем просроченные цели
+        checkAndMoveOverdueGoals();
+    }
+
+    private void checkAndMoveOverdueGoals() {
+        List<Goal> activeGoals = goalManager.getActiveGoals();
+        for (Goal goal : activeGoals) {
+            if (goal.isOverdue() && goal.getStatus() == 0) {
+                // Перемещаем просроченную цель в неактивные
+                goalManager.updateGoalStatus(goal.getId(), 1, new GoalManager.GoalCallback() {
+                    @Override
+                    public void onSuccess(Goal goal) {
+                        requireActivity().runOnUiThread(() -> {
+                            updateUI();
+                            // Показываем уведомление
+                            Snackbar.make(requireView(),
+                                    "Цель \"" + goal.getTitle() + "\" перемещена в неактивные (просрочена)",
+                                    Snackbar.LENGTH_LONG).show();
+                        });
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        // Логируем ошибку
+                    }
+                });
+            }
+        }
     }
 
     // Диалог создания цели
@@ -371,7 +419,7 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
         Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 
         if (positiveButton != null) {
-            positiveButton.setTextColor(getResources().getColor(R.color.accent_blue));
+            positiveButton.setTextColor(getResources().getColor(R.color.accent_green));
         }
         if (negativeButton != null) {
             negativeButton.setTextColor(getResources().getColor(R.color.text_main_secondary));
@@ -437,7 +485,7 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
         Button negativeButton = dialog.getButton(AlertDialog.BUTTON_NEGATIVE);
 
         if (positiveButton != null) {
-            positiveButton.setTextColor(getResources().getColor(R.color.accent_blue));
+            positiveButton.setTextColor(getResources().getColor(R.color.accent_green));
         }
         if (negativeButton != null) {
             negativeButton.setTextColor(getResources().getColor(R.color.text_main_secondary));
@@ -456,6 +504,8 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
         TextView progressText = view.findViewById(R.id.progressText);
         TextView createdAtText = view.findViewById(R.id.createdAtText);
         TextView deadlineText = view.findViewById(R.id.deadlineText);
+        TextView completedAtText = view.findViewById(R.id.completedAtText);
+        View completedAtContainer = view.findViewById(R.id.completedAtContainer);
         ProgressBar progressBar = view.findViewById(R.id.progressBar);
 
         // Заполняем данные
@@ -477,10 +527,18 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
             deadlineText.setText("Без срока");
         }
 
+        // Дата закрытия (только для завершенных целей)
+        if (goal.isCompleted() && goal.getCompletedAt() != null) {
+            completedAtContainer.setVisibility(View.VISIBLE);
+            completedAtText.setText(dateFormat.format(goal.getCompletedAt()));
+        } else {
+            completedAtContainer.setVisibility(View.GONE);
+        }
+
         builder.setView(view);
         builder.setPositiveButton("OK", null);
 
-        if (!goal.isCompleted()) {
+        if (!goal.isCompleted() && goal.getStatus() != 2) {
             builder.setNeutralButton("Выполнить", (dialog, which) -> {
                 goalManager.markGoalAsCompleted(goal.getId(), new GoalManager.GoalCallback() {
                     @Override
@@ -510,13 +568,13 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
         Button neutralButton = dialog.getButton(AlertDialog.BUTTON_NEUTRAL);
 
         if (positiveButton != null) {
-            positiveButton.setTextColor(getResources().getColor(R.color.accent_blue));
+            positiveButton.setTextColor(getResources().getColor(R.color.accent_green));
         }
         if (negativeButton != null) {
             negativeButton.setTextColor(getResources().getColor(R.color.text_main_secondary));
         }
         if (neutralButton != null) {
-            neutralButton.setTextColor(getResources().getColor(R.color.status_success));
+            neutralButton.setTextColor(getResources().getColor(R.color.text_main_secondary));
         }
     }
 
@@ -576,5 +634,11 @@ public class GoalsFragment extends Fragment implements GoalsAdapter.OnGoalAction
             // Альтернативный вариант если основной падает
             //showSimpleDatePicker(deadlineInput);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
     }
 }
